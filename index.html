@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#121212">
+    <meta
+      name="description"
+      content="Khám phá phim điện ảnh, xem đánh giá từ giới phê bình và khán giả, lưu lại những bộ phim bạn yêu thích."
+    >
+    <title>Khung Hình — Khám phá điện ảnh</title>
+    <link rel="preconnect" href="https://resizing.flixster.com">
+    <link rel="stylesheet" href="./css/style.css">
+    <script type="module" src="./js/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Đi đến nội dung chính</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="#home" aria-label="Khung Hình, về đầu trang">
+          <span class="brand-mark" aria-hidden="true">K</span>
+          <span>KHUNG<span class="brand-light">HÌNH</span></span>
+        </a>
+        <nav class="primary-nav" aria-label="Điều hướng chính">
+          <a href="#home">Trang chủ</a>
+          <a href="#catalog">Khám phá</a>
+          <a href="#featured">Phim nổi bật</a>
+          <button class="nav-favorites" type="button" data-action="favorites">
+            Yêu thích <span class="favorite-count" data-favorite-count>0</span>
+          </button>
+        </nav>
+        <form class="header-search" role="search" data-search-form>
+          <label class="visually-hidden" for="site-search">Tìm kiếm phim</label>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="10.8" cy="10.8" r="6.8"></circle>
+            <path d="m16 16 4.2 4.2"></path>
+          </svg>
+          <input
+            id="site-search"
+            type="search"
+            placeholder="Tìm tên phim..."
+            autocomplete="off"
+            aria-controls="movie-grid"
+            list="movie-suggestions"
+            data-search
+          >
+          <datalist id="movie-suggestions"></datalist>
+          <button class="clear-search" type="button" data-action="clear-search" aria-label="Xóa tìm kiếm">×</button>
+        </form>
+        <button class="menu-toggle" type="button" aria-label="Mở menu" aria-expanded="false" data-action="menu">
+          <span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="hero-section" id="home" aria-label="Phim nổi bật">
+        <img class="hero-backdrop" data-hero-backdrop alt="" aria-hidden="true">
+        <div class="hero-shade" aria-hidden="true"></div>
+        <div class="hero-content page-shell">
+          <p class="eyebrow"><span class="eyebrow-line"></span> TUYỂN CHỌN ĐIỆN ẢNH</p>
+          <p class="hero-kicker" data-hero-kicker></p>
+          <h1 data-hero-title></h1>
+          <div class="hero-meta" data-hero-meta></div>
+          <p class="hero-description" data-hero-description></p>
+          <div class="hero-actions">
+            <button class="button button-primary" type="button" data-action="hero-details">
+              <span aria-hidden="true">▶</span> Khám phá phim
+            </button>
+            <button class="button button-glass" type="button" data-action="hero-favorite">
+              <span aria-hidden="true">＋</span> Thêm yêu thích
+            </button>
+          </div>
+          <div class="hero-controls" aria-label="Điều khiển phim nổi bật">
+            <button class="icon-button" type="button" data-action="hero-previous" aria-label="Phim trước">←</button>
+            <div class="hero-dots" data-hero-dots></div>
+            <button class="icon-button" type="button" data-action="hero-next" aria-label="Phim tiếp theo">→</button>
+            <button
+              class="icon-button hero-pause"
+              type="button"
+              data-action="hero-pause"
+              aria-label="Tạm dừng tự chuyển"
+              aria-pressed="false"
+            >Ⅱ</button>
+          </div>
+        </div>
+        <a class="scroll-cue" href="#catalog"><span></span> Cuộn để khám phá</a>
+      </section>
+
+      <section class="discovery page-shell" id="featured">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-line"></span> GỢI Ý KHÁM PHÁ</p>
+            <h2>Tìm phim theo <span>gu của bạn</span></h2>
+          </div>
+          <a class="text-link" href="#catalog">Khám phá thư viện <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="collection-grid" aria-label="Lối tắt khám phá phim">
+          <button class="collection-card" type="button" data-action="collection" data-collection="critics">
+            <span class="collection-index">01</span>
+            <span><strong>Được giới phê bình yêu thích</strong><small>Sắp xếp theo Tomatometer</small></span>
+            <span class="collection-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="collection-card" type="button" data-action="collection" data-collection="audience">
+            <span class="collection-index">02</span>
+            <span><strong>Khán giả bình chọn</strong><small>Sắp xếp theo Popcornmeter</small></span>
+            <span class="collection-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="collection-card" type="button" data-action="collection" data-collection="classics">
+            <span class="collection-index">03</span>
+            <span><strong>Những tác phẩm kinh điển</strong><small>Phim phát hành trước năm 2000</small></span>
+            <span class="collection-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="collection-card" type="button" data-action="collection" data-collection="recent">
+            <span class="collection-index">04</span>
+            <span><strong>Phim nổi bật gần đây</strong><small>Từ năm 2015 trở đi</small></span>
+            <span class="collection-arrow" aria-hidden="true">↗</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="catalog-section page-shell" id="catalog">
+        <div class="section-heading catalog-heading">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-line"></span> THƯ VIỆN PHIM</p>
+            <h2 data-catalog-title>Khám phá <span>điện ảnh</span></h2>
+          </div>
+          <p class="catalog-intro">Tìm câu chuyện tiếp theo của bạn trong bộ sưu tập tuyển chọn.</p>
+        </div>
+
+        <div class="filter-panel glass-panel" aria-label="Tìm kiếm và lọc phim">
+          <div class="filter-control filter-search">
+            <label for="catalog-search">Tìm phim</label>
+            <div class="filter-input">
+              <span aria-hidden="true">⌕</span>
+              <input id="catalog-search" type="search" placeholder="Tên tiếng Việt hoặc tên gốc" data-search>
+            </div>
+          </div>
+          <div class="filter-control">
+            <label for="genre-filter">Thể loại</label>
+            <select id="genre-filter" data-filter="genre"><option value="">Tất cả thể loại</option></select>
+          </div>
+          <div class="filter-control">
+            <label for="year-filter">Năm phát hành</label>
+            <select id="year-filter" data-filter="year"><option value="">Mọi năm</option></select>
+          </div>
+          <div class="filter-control">
+            <label for="era-filter">Thời kỳ</label>
+            <select id="era-filter" data-filter="era">
+              <option value="">Mọi thời kỳ</option>
+              <option value="classics">Trước năm 2000</option>
+              <option value="recent">Từ năm 2015</option>
+            </select>
+          </div>
+          <div class="filter-control">
+            <label for="score-filter">Điểm tối thiểu</label>
+            <select id="critics-filter" data-filter="critics">
+              <option value="">Chuyên gia: mọi mức</option>
+              <option value="60">60% trở lên</option>
+              <option value="70">70% trở lên</option>
+              <option value="80">80% trở lên</option>
+              <option value="90">90% trở lên</option>
+            </select>
+          </div>
+          <div class="filter-control">
+            <label for="audience-filter">Điểm khán giả</label>
+            <select id="audience-filter" data-filter="audience">
+              <option value="">Khán giả: mọi mức</option>
+              <option value="60">60% trở lên</option>
+              <option value="70">70% trở lên</option>
+              <option value="80">80% trở lên</option>
+              <option value="90">90% trở lên</option>
+            </select>
+          </div>
+          <div class="filter-control">
+            <label for="sort-select">Sắp xếp</label>
+            <select id="sort-select" data-sort>
+              <option value="featured">Gợi ý</option>
+              <option value="title-asc">Tên phim A–Z</option>
+              <option value="title-desc">Tên phim Z–A</option>
+              <option value="newest">Mới nhất</option>
+              <option value="oldest">Cũ nhất</option>
+              <option value="critics">Điểm chuyên gia cao</option>
+              <option value="audience">Điểm khán giả cao</option>
+            </select>
+          </div>
+          <label class="favorite-filter">
+            <input type="checkbox" data-filter="favorites">
+            <span class="checkmark" aria-hidden="true"></span>
+            Chỉ phim yêu thích
+          </label>
+          <button class="reset-button" type="button" data-action="reset-filters">Đặt lại</button>
+        </div>
+
+        <div class="results-bar">
+          <p data-results-count aria-live="polite" tabindex="-1"></p>
+          <div class="page-size-control">
+            <label for="page-size">Hiển thị</label>
+            <select id="page-size" data-page-size>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="all">Tất cả</option>
+            </select>
+            <span>mỗi trang</span>
+          </div>
+        </div>
+
+        <div class="movie-grid" id="movie-grid" data-movie-grid>
+          <div class="skeleton-card" aria-hidden="true"><span></span><i></i><i></i><i></i></div>
+          <div class="skeleton-card" aria-hidden="true"><span></span><i></i><i></i><i></i></div>
+          <div class="skeleton-card" aria-hidden="true"><span></span><i></i><i></i><i></i></div>
+          <div class="skeleton-card" aria-hidden="true"><span></span><i></i><i></i><i></i></div>
+        </div>
+        <div class="empty-state" data-empty-state hidden>
+          <span class="empty-icon" aria-hidden="true">⌕</span>
+          <h3>Chưa tìm thấy thước phim phù hợp</h3>
+          <p>Thử đổi từ khóa hoặc nới lỏng bộ lọc của bạn.</p>
+          <button class="button button-glass" type="button" data-action="reset-filters">Xóa bộ lọc</button>
+        </div>
+        <nav class="pagination" aria-label="Phân trang danh sách phim" data-pagination></nav>
+      </section>
+
+      <section class="closing-note page-shell">
+        <div class="closing-rule"></div>
+        <p>Điện ảnh không chỉ là những gì ta nhìn thấy,<br><span>mà còn là những gì ta cảm nhận.</span></p>
+        <span class="closing-mark" aria-hidden="true">K</span>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner page-shell">
+        <a class="brand footer-brand" href="#home"><span class="brand-mark" aria-hidden="true">K</span><span>KHUNG<span class="brand-light">HÌNH</span></span></a>
+        <p>Một góc nhỏ dành cho những câu chuyện lớn.</p>
+        <a href="https://www.rottentomatoes.com/" target="_blank" rel="noreferrer">Nguồn đánh giá: Rotten Tomatoes ↗</a>
+        <span>© <span data-current-year></span> Khung Hình</span>
+      </div>
+    </footer>
+
+    <dialog class="movie-dialog" data-movie-dialog aria-labelledby="dialog-title">
+      <button class="dialog-close" type="button" data-action="close-dialog" aria-label="Đóng chi tiết phim">×</button>
+      <div class="dialog-content" data-dialog-content></div>
+    </dialog>
+    <div class="toast-region" aria-live="polite" aria-atomic="true" data-toast-region></div>
+  </body>
+</html>
