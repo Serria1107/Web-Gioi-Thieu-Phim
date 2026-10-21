@@ -1,4 +1,4 @@
-import { movies } from "./movies.js";
+const movies = window.movies;
 
 const elements = {
   catalog: document.querySelector("#catalog"),
@@ -711,3 +711,26 @@ setSearchSuggestions("");
 if (!state.storageAvailable) {
   showToast("Không thể đọc danh sách yêu thích đã lưu; danh sách tạm thời rỗng.", true);
 }
+
+
+// --- Auth Session & Logout Handling ---
+(function initUserSession() {
+  try {
+    const rawSession = localStorage.getItem("khung-hinh:session") || sessionStorage.getItem("khung-hinh:session");
+    if (rawSession) {
+      const session = JSON.parse(rawSession);
+      const nameEl = document.getElementById("user-nav-name");
+      if (nameEl) {
+        nameEl.textContent = session.name || session.email;
+        nameEl.title = `Đã đăng nhập: ${session.email}`;
+      }
+    }
+  } catch (e) {}
+
+  const logoutBtn = document.getElementById("nav-logout-btn");
+  logoutBtn?.addEventListener("click", () => {
+    localStorage.removeItem("khung-hinh:session");
+    sessionStorage.removeItem("khung-hinh:session");
+    window.location.href = "index.html?logged_out=1";
+  });
+})();

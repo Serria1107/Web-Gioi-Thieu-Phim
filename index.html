@@ -11,10 +11,988 @@
     <title>Khung Hình — Khám phá điện ảnh</title>
     <link rel="preconnect" href="https://resizing.flixster.com">
     <link rel="stylesheet" href="./css/style.css">
-    <script type="module" src="./js/app.js"></script>
+    <script>
+      try {
+        const rawSession = localStorage.getItem("khung-hinh:session") || sessionStorage.getItem("khung-hinh:session");
+        if (rawSession && JSON.parse(rawSession).email) document.documentElement.classList.add("has-session");
+      } catch (error) {
+        console.error("Could not read the login session.", error);
+      }
+    </script>
+    <script>
+/**
+ * Khung Hình Cinema — Authentication Script
+ * Quản lý Đăng nhập, Tạo tài khoản, Xác thực Local, Chuyển hướng và Phiên làm việc.
+ */
+
+const STORAGE_KEY_ACCOUNTS = "khung-hinh:accounts";
+const STORAGE_KEY_SESSION = "khung-hinh:session";
+
+function getStoredAccounts() {
+  const storedAccounts = localStorage.getItem(STORAGE_KEY_ACCOUNTS);
+  const accounts = storedAccounts ? JSON.parse(storedAccounts) : [];
+  if (!Array.isArray(accounts)) {
+    throw new Error("Dữ liệu tài khoản không hợp lệ.");
+  }
+  return accounts;
+}
+
+function saveAccount(account) {
+  const accounts = getStoredAccounts();
+  accounts.push(account);
+  localStorage.setItem(STORAGE_KEY_ACCOUNTS, JSON.stringify(accounts));
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  let isAuthenticated = false;
+  try {
+    const rawSession = localStorage.getItem("khung-hinh:session") || sessionStorage.getItem("khung-hinh:session");
+    isAuthenticated = Boolean(rawSession && JSON.parse(rawSession).email);
+  } catch (error) {
+    console.error("Could not read the login session.", error);
+  }
+
+  document.documentElement.classList.toggle("has-session", isAuthenticated);
+  document.body.classList.toggle("login-page", !isAuthenticated);
+  document.getElementById("login-screen").hidden = isAuthenticated;
+  document.getElementById("site-content").hidden = !isAuthenticated;
+  document.title = isAuthenticated ? "Khung Hình — Khám phá điện ảnh" : "Đăng nhập & Đăng ký — Khung Hình Cinema";
+  // --- DOM Elements ---
+  const tabLogin = document.getElementById("tab-login");
+  const tabRegister = document.getElementById("tab-register");
+  const loginForm = document.getElementById("login-form");
+  const registerForm = document.getElementById("register-form");
+  const formHeading = document.getElementById("form-heading");
+  const formSubtitle = document.getElementById("form-subtitle");
+  const statusAlert = document.getElementById("login-status");
+  const cinemaBadgeText = document.getElementById("cinema-badge-text");
+
+  // Login Form Elements
+  const loginEmail = document.getElementById("login-email");
+  const loginPassword = document.getElementById("login-password");
+  const loginRemember = document.getElementById("login-remember");
+  const loginSubmitBtn = document.getElementById("login-submit-button");
+  const toggleLoginPassBtn = document.getElementById("toggle-login-password");
+  const loginEmailError = document.getElementById("login-email-error");
+  const loginPassError = document.getElementById("login-password-error");
+  const loginGroupEmail = document.getElementById("login-group-email");
+  const loginGroupPassword = document.getElementById("login-group-password");
+
+  // Register Form Elements
+  const registerName = document.getElementById("register-name");
+  const registerEmail = document.getElementById("register-email");
+  const registerPassword = document.getElementById("register-password");
+  const registerConfirm = document.getElementById("register-confirm");
+  const registerSubmitBtn = document.getElementById("register-submit-button");
+  const toggleRegisterPassBtn = document.getElementById("toggle-register-password");
+  const toggleRegisterConfirmBtn = document.getElementById("toggle-register-confirm");
+  const registerNameError = document.getElementById("register-name-error");
+  const registerEmailError = document.getElementById("register-email-error");
+  const registerPassError = document.getElementById("register-password-error");
+  const registerConfirmError = document.getElementById("register-confirm-error");
+  const registerGroupName = document.getElementById("register-group-name");
+  const registerGroupEmail = document.getElementById("register-group-email");
+  const registerGroupPass = document.getElementById("register-group-password");
+  const registerGroupConfirm = document.getElementById("register-group-confirm");
+
+  // Backdrop, Card, Dialog
+  const backdropImage = document.getElementById("cinematic-bg");
+  const cinematicCard = document.getElementById("login-card");
+  const dialog = document.getElementById("cinematic-dialog");
+  const dialogTitle = document.getElementById("login-dialog-title");
+  const dialogContent = document.getElementById("dialog-content");
+  const dialogIcon = document.getElementById("dialog-icon");
+  const dialogCloseBtn = document.getElementById("dialog-close");
+  const dialogConfirmBtn = document.getElementById("dialog-confirm");
+  const forgotPasswordTrigger = document.getElementById("forgot-password-trigger");
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // --- 1. Cinematic Backdrop Image ---
+  const CINEMATIC_BACKDROP_URL =
+    "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=2000&q=85";
+
+  if (backdropImage) {
+    const img = new Image();
+    img.src = CINEMATIC_BACKDROP_URL;
+    img.onload = () => {
+      backdropImage.style.backgroundImage = `url("${CINEMATIC_BACKDROP_URL}")`;
+      backdropImage.classList.add("loaded");
+    };
+    img.onerror = () => {
+      const fallbackUrl =
+        "https://resizing.flixster.com/Wg25mLoPWxjcxXzNyaSF4VGgGE4=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzL2ZiNjZiNWFkLWVhNzEtNDRhMC1iNGIwLTFmY2FkNzllNTJlMi5qcGc=";
+      backdropImage.style.backgroundImage = `url("${fallbackUrl}")`;
+      backdropImage.classList.add("loaded");
+    };
+  }
+
+  // Parallax effect on desktop
+  if (!prefersReducedMotion && cinematicCard && window.innerWidth > 992) {
+    let mouseX = 0;
+    let mouseY = 0;
+    let currentX = 0;
+    let currentY = 0;
+
+    window.addEventListener("mousemove", (e) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      mouseX = (e.clientX - centerX) / centerX;
+      mouseY = (e.clientY - centerY) / centerY;
+    });
+
+    const animateParallax = () => {
+      currentX += (mouseX - currentX) * 0.05;
+      currentY += (mouseY - currentY) * 0.05;
+
+      if (backdropImage) {
+        backdropImage.style.transform = `scale(1.08) translate3d(${currentX * -10}px, ${currentY * -10}px, 0)`;
+      }
+      cinematicCard.style.transform = `perspective(1000px) rotateY(${currentX * 2.5}deg) rotateX(${currentY * -2.5}deg) translate3d(${currentX * 4}px, ${currentY * 4}px, 0)`;
+
+      requestAnimationFrame(animateParallax);
+    };
+
+    requestAnimationFrame(animateParallax);
+  }
+
+  // --- 2. Setup Password Toggle Buttons ---
+  function setupPasswordToggle(button, input) {
+    if (!button || !input) return;
+    const eyeOpen = button.querySelector(".icon-eye-open");
+    const eyeClosed = button.querySelector(".icon-eye-closed");
+
+    button.addEventListener("click", () => {
+      const isPassword = input.getAttribute("type") === "password";
+      input.setAttribute("type", isPassword ? "text" : "password");
+      button.setAttribute("aria-pressed", isPassword ? "true" : "false");
+      button.setAttribute("aria-label", isPassword ? "Ẩn mật khẩu" : "Hiển thị mật khẩu");
+
+      if (eyeOpen && eyeClosed) {
+        if (isPassword) {
+          eyeOpen.setAttribute("hidden", "true");
+          eyeClosed.removeAttribute("hidden");
+        } else {
+          eyeClosed.setAttribute("hidden", "true");
+          eyeOpen.removeAttribute("hidden");
+        }
+      }
+      input.focus();
+    });
+  }
+
+  setupPasswordToggle(toggleLoginPassBtn, loginPassword);
+  setupPasswordToggle(toggleRegisterPassBtn, registerPassword);
+  setupPasswordToggle(toggleRegisterConfirmBtn, registerConfirm);
+
+  // --- 3. View Switching (Login vs Register via Hash) ---
+  function switchView(targetMode) {
+    clearAllErrors();
+
+    if (targetMode === "register" || targetMode === "signup") {
+      tabRegister?.classList.add("active");
+      tabRegister?.setAttribute("aria-selected", "true");
+      tabLogin?.classList.remove("active");
+      tabLogin?.setAttribute("aria-selected", "false");
+
+      loginForm.classList.remove("active");
+      loginForm.setAttribute("hidden", "true");
+
+      registerForm.classList.add("active");
+      registerForm.removeAttribute("hidden");
+
+      if (formHeading) formHeading.textContent = "TẠO TÀI KHOẢN ĐIỆN ẢNH";
+      if (formSubtitle) {
+        formSubtitle.textContent =
+          "Gia nhập Khung Hình Cinema để lưu lại các tuyệt tác điện ảnh và nhận đánh giá từ giới phê bình.";
+      }
+      if (cinemaBadgeText) cinemaBadgeText.textContent = "THÀNH VIÊN MỚI";
+
+      registerName?.focus();
+    } else {
+      tabLogin?.classList.add("active");
+      tabLogin?.setAttribute("aria-selected", "true");
+      tabRegister?.classList.remove("active");
+      tabRegister?.setAttribute("aria-selected", "false");
+
+      registerForm.classList.remove("active");
+      registerForm.setAttribute("hidden", "true");
+
+      loginForm.classList.add("active");
+      loginForm.removeAttribute("hidden");
+
+      if (formHeading) formHeading.textContent = "WELCOME BACK TO THE MOVIES";
+      if (formSubtitle) {
+        formSubtitle.textContent =
+          "Đăng nhập để tiếp tục hành trình thưởng thức điện ảnh đỉnh cao và quản lý bộ sưu tập phim của bạn.";
+      }
+      if (cinemaBadgeText) cinemaBadgeText.textContent = "CINEMATIC ACCESS";
+    }
+  }
+
+  function handleHash() {
+    const hash = window.location.hash.toLowerCase();
+    if (hash === "#register" || hash === "#signup") {
+      switchView("register");
+    } else {
+      switchView("login");
+    }
+  }
+
+  window.addEventListener("hashchange", handleHash);
+
+  // --- 4. Validation Helpers ---
+  const validateEmailFormat = (email) => {
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(String(email).trim());
+  };
+
+  const showFieldError = (input, errorEl, groupEl, message) => {
+    if (!input || !errorEl || !groupEl) return;
+    input.setAttribute("aria-invalid", "true");
+    groupEl.classList.add("has-error");
+    errorEl.textContent = message;
+    errorEl.removeAttribute("hidden");
+  };
+
+  const clearFieldError = (input, errorEl, groupEl) => {
+    if (!input || !errorEl || !groupEl) return;
+    input.removeAttribute("aria-invalid");
+    groupEl.classList.remove("has-error");
+    errorEl.textContent = "";
+    errorEl.setAttribute("hidden", "true");
+  };
+
+  function clearAllErrors() {
+    clearFieldError(loginEmail, loginEmailError, loginGroupEmail);
+    clearFieldError(loginPassword, loginPassError, loginGroupPassword);
+    clearFieldError(registerName, registerNameError, registerGroupName);
+    clearFieldError(registerEmail, registerEmailError, registerGroupEmail);
+    clearFieldError(registerPassword, registerPassError, registerGroupPass);
+    clearFieldError(registerConfirm, registerConfirmError, registerGroupConfirm);
+  }
+
+  // --- Status Banner Helper ---
+  function showStatus(type, message) {
+    if (!statusAlert) return;
+    statusAlert.className = `login-status-alert status-${type}`;
+    const icon =
+      type === "success"
+        ? '<polyline points="20 6 9 17 4 12"></polyline>'
+        : type === "warning"
+        ? '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>'
+        : type === "error"
+        ? '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>'
+        : '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>';
+
+    statusAlert.innerHTML = `
+      <div class="status-content">
+        <svg class="status-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          ${icon}
+        </svg>
+        <span></span>
+      </div>
+    `;
+    statusAlert.querySelector(".status-content span").textContent = message;
+    statusAlert.removeAttribute("hidden");
+  }
+
+  function hideStatus() {
+    if (!statusAlert) return;
+    statusAlert.setAttribute("hidden", "true");
+    statusAlert.innerHTML = "";
+  }
+
+  // Check URL query parameters on initial page load
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("required") === "1") {
+    showStatus("warning", "Bạn cần đăng nhập để truy cập trang chủ Khung Hình Cinema.");
+  } else if (urlParams.get("logged_out") === "1") {
+    showStatus("success", "Bạn đã đăng xuất thành công khỏi hệ thống.");
+  }
+
+  // --- 5. REGISTER FORM SUBMIT HANDLER ---
+  registerForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    hideStatus();
+
+    let hasError = false;
+
+    // Validate Name
+    const nameVal = registerName.value.trim();
+    if (!nameVal) {
+      showFieldError(registerName, registerNameError, registerGroupName, "Vui lòng nhập họ và tên của bạn.");
+      hasError = true;
+    } else if (nameVal.length < 2) {
+      showFieldError(registerName, registerNameError, registerGroupName, "Họ và tên cần ít nhất 2 ký tự.");
+      hasError = true;
+    } else {
+      clearFieldError(registerName, registerNameError, registerGroupName);
+    }
+
+    // Validate Email
+    const emailVal = registerEmail.value.trim();
+    if (!emailVal) {
+      showFieldError(registerEmail, registerEmailError, registerGroupEmail, "Vui lòng nhập địa chỉ email.");
+      hasError = true;
+    } else if (!validateEmailFormat(emailVal)) {
+      showFieldError(registerEmail, registerEmailError, registerGroupEmail, "Định dạng email chưa hợp lệ.");
+      hasError = true;
+    } else {
+      // Check if email already registered
+      let accounts;
+      try {
+        accounts = getStoredAccounts();
+      } catch (error) {
+        console.error("Could not read accounts from browser storage.", error);
+        showStatus("error", "Không thể đọc tài khoản đã lưu. Hãy kiểm tra bộ nhớ trình duyệt rồi thử lại.");
+        return;
+      }
+      const exists = accounts.some((acc) => acc.email.toLowerCase() === emailVal.toLowerCase());
+      if (exists) {
+        showFieldError(
+          registerEmail,
+          registerEmailError,
+          registerGroupEmail,
+          "Email này đã được đăng ký tài khoản. Vui lòng đăng nhập."
+        );
+        hasError = true;
+      } else {
+        clearFieldError(registerEmail, registerEmailError, registerGroupEmail);
+      }
+    }
+
+    // Validate Password
+    const passVal = registerPassword.value;
+    if (!passVal) {
+      showFieldError(registerPassword, registerPassError, registerGroupPass, "Vui lòng nhập mật khẩu.");
+      hasError = true;
+    } else if (passVal.length < 6) {
+      showFieldError(registerPassword, registerPassError, registerGroupPass, "Mật khẩu phải chứa ít nhất 6 ký tự.");
+      hasError = true;
+    } else {
+      clearFieldError(registerPassword, registerPassError, registerGroupPass);
+    }
+
+    // Validate Confirm Password
+    const confirmVal = registerConfirm.value;
+    if (!confirmVal) {
+      showFieldError(registerConfirm, registerConfirmError, registerGroupConfirm, "Vui lòng xác nhận lại mật khẩu.");
+      hasError = true;
+    } else if (confirmVal !== passVal) {
+      showFieldError(registerConfirm, registerConfirmError, registerGroupConfirm, "Mật khẩu xác nhận không trùng khớp.");
+      hasError = true;
+    } else {
+      clearFieldError(registerConfirm, registerConfirmError, registerGroupConfirm);
+    }
+
+    if (hasError) return;
+
+    // Loading State
+    registerSubmitBtn.classList.add("is-loading");
+    registerSubmitBtn.setAttribute("disabled", "true");
+    const submitText = registerSubmitBtn.querySelector(".submit-text");
+    if (submitText) submitText.textContent = "Đang tạo tài khoản...";
+
+    await new Promise((r) => setTimeout(r, 650));
+
+    try {
+      saveAccount({
+        name: nameVal,
+        email: emailVal,
+        password: passVal,
+        createdAt: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error("Could not save the new account to browser storage.", error);
+      showStatus("error", "Không thể lưu tài khoản trên trình duyệt. Hãy kiểm tra dung lượng và quyền lưu trữ rồi thử lại.");
+      registerSubmitBtn.classList.remove("is-loading");
+      registerSubmitBtn.removeAttribute("disabled");
+      if (submitText) submitText.textContent = "Tạo tài khoản ngay";
+      return;
+    }
+
+    // Reset register button
+    registerSubmitBtn.classList.remove("is-loading");
+    registerSubmitBtn.removeAttribute("disabled");
+    if (submitText) submitText.textContent = "Tạo tài khoản ngay";
+
+    // Reset register form inputs
+    registerForm.reset();
+
+    // Switch to Login View
+    window.location.hash = "#login";
+
+    // Auto-fill newly created email in Login Form
+    if (loginEmail) {
+      loginEmail.value = emailVal;
+    }
+    if (loginPassword) {
+      loginPassword.value = "";
+      loginPassword.focus();
+    }
+
+    // Thông báo tạo tài khoản thành công
+    showStatus(
+      "success",
+      `Tạo tài khoản [${emailVal}] thành công! Vui lòng nhập mật khẩu vừa tạo để đăng nhập vào trang chủ.`
+    );
+  });
+
+  // --- 6. LOGIN FORM SUBMIT HANDLER ---
+  loginForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    hideStatus();
+
+    let hasError = false;
+
+    // Validate Email
+    const emailVal = loginEmail.value.trim();
+    if (!emailVal) {
+      showFieldError(loginEmail, loginEmailError, loginGroupEmail, "Vui lòng nhập địa chỉ email của bạn.");
+      hasError = true;
+    } else if (!validateEmailFormat(emailVal)) {
+      showFieldError(loginEmail, loginEmailError, loginGroupEmail, "Định dạng email chưa hợp lệ.");
+      hasError = true;
+    } else {
+      clearFieldError(loginEmail, loginEmailError, loginGroupEmail);
+    }
+
+    // Validate Password
+    const passVal = loginPassword.value;
+    if (!passVal) {
+      showFieldError(loginPassword, loginPassError, loginGroupPassword, "Vui lòng nhập mật khẩu.");
+      hasError = true;
+    } else {
+      clearFieldError(loginPassword, loginPassError, loginGroupPassword);
+    }
+
+    if (hasError) return;
+
+    // Check against stored accounts
+    let accounts;
+    try {
+      accounts = getStoredAccounts();
+    } catch (error) {
+      console.error("Could not read accounts from browser storage.", error);
+      showStatus("error", "Không thể đọc tài khoản đã lưu. Hãy kiểm tra bộ nhớ trình duyệt rồi thử lại.");
+      return;
+    }
+    const matchedAccount = accounts.find((acc) => acc.email.toLowerCase() === emailVal.toLowerCase());
+
+    if (!matchedAccount) {
+      showStatus("error", "Tài khoản không tồn tại. Vui lòng kiểm tra lại email hoặc tạo tài khoản mới.");
+      loginEmail.focus();
+      return;
+    }
+
+    if (matchedAccount.password !== passVal) {
+      showStatus("error", "Mật khẩu không chính xác. Vui lòng thử lại.");
+      loginPassword.focus();
+      return;
+    }
+
+    // Authentication Success Flow
+    loginSubmitBtn.classList.add("is-loading");
+    loginSubmitBtn.setAttribute("disabled", "true");
+    const submitText = loginSubmitBtn.querySelector(".submit-text");
+    if (submitText) submitText.textContent = "Đang đăng nhập...";
+
+    await new Promise((r) => setTimeout(r, 700));
+
+    // Save Session
+    const sessionData = {
+      name: matchedAccount.name,
+      email: matchedAccount.email,
+      loggedInAt: Date.now()
+    };
+
+    const isRemember = loginRemember?.checked;
+    try {
+      localStorage.removeItem(STORAGE_KEY_SESSION);
+      sessionStorage.removeItem(STORAGE_KEY_SESSION);
+      if (isRemember) {
+        localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(sessionData));
+      } else {
+        sessionStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(sessionData));
+      }
+    } catch (error) {
+      console.error("Could not save the login session.", error);
+      showStatus("error", "Không thể lưu phiên đăng nhập trên trình duyệt. Hãy bật bộ nhớ trang web rồi thử lại.");
+      loginSubmitBtn.classList.remove("is-loading");
+      loginSubmitBtn.removeAttribute("disabled");
+      if (submitText) submitText.textContent = "Đăng nhập";
+      return;
+    }
+
+    showStatus("success", `Đăng nhập thành công! Chào mừng ${matchedAccount.name}, đang chuyển đến trang chủ...`);
+
+    // Redirect to index.html
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 600);
+  });
+
+  // --- 7. Modal Dialog Handling (Forgot Password) ---
+  const openDialog = (title, message, iconSvg) => {
+    if (!dialog) return;
+    dialogTitle.textContent = title;
+    dialogContent.textContent = message;
+    dialogIcon.innerHTML =
+      iconSvg ||
+      `
+      <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#d0ad75" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+    `;
+    dialog.removeAttribute("hidden");
+    document.body.classList.add("modal-open");
+    dialogConfirmBtn?.focus();
+  };
+
+  const closeDialog = () => {
+    if (!dialog) return;
+    dialog.setAttribute("hidden", "true");
+    document.body.classList.remove("modal-open");
+  };
+
+  forgotPasswordTrigger?.addEventListener("click", (e) => {
+    e.preventDefault();
+    openDialog(
+      "Khôi phục mật khẩu điện ảnh",
+      "Nếu bạn quên mật khẩu, hãy tạo một tài khoản mới bằng liên kết 'Tạo tài khoản' hoặc liên hệ quản trị viên Khung Hình Cinema để được hỗ trợ cấp lại mật khẩu.",
+      `<svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#d0ad75" stroke-width="2">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>`
+    );
+  });
+
+  dialogCloseBtn?.addEventListener("click", closeDialog);
+  dialogConfirmBtn?.addEventListener("click", closeDialog);
+  dialog?.addEventListener("click", (e) => {
+    if (e.target === dialog) closeDialog();
+  });
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && dialog && !dialog.hasAttribute("hidden")) {
+      closeDialog();
+    }
+  });
+
+  // Initialize view based on initial hash
+  handleHash();
+});
+    </script>
+<script defer src="./js/movies.js"></script>
+    <script defer src="./js/app.js"></script>
   </head>
-  <body>
-    <a class="skip-link" href="#main-content">Đi đến nội dung chính</a>
+  <body class="login-page">
+    <div id="login-screen">
+<a class="skip-link" href="#login-card">Đi đến biểu mẫu</a>
+
+    <!-- Cinematic Backdrop Container -->
+    <div class="cinematic-backdrop-wrapper" aria-hidden="true">
+      <div class="cinematic-backdrop-layer backdrop-image" id="cinematic-bg"></div>
+      <div class="cinematic-film-grain"></div>
+      <div class="cinematic-vignette"></div>
+      <div class="cinematic-spotlight"></div>
+    </div>
+
+    <!-- Brand Header -->
+    <header class="cinematic-header">
+      <div class="cinematic-header-inner">
+        <div class="cinematic-brand" aria-label="Khung Hình Cinema">
+          <span class="brand-mark" aria-hidden="true">K</span>
+          <span class="brand-text">KHUNG<span class="brand-light">HÌNH</span></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Shell -->
+    <main class="cinematic-main" id="login-main-content">
+      <section class="login-wrapper">
+        <div class="login-card" id="login-card" role="region" aria-labelledby="form-heading">
+
+          <!-- Cinema Header Badge & Heading -->
+          <div class="login-card-header">
+            <div class="cinema-badge" id="cinema-badge" aria-label="Trạng thái hệ thống rạp">
+              <span class="cinema-badge-dot"></span>
+              <span class="cinema-badge-text" id="cinema-badge-text">CINEMATIC ACCESS</span>
+            </div>
+            <h1 class="login-title" id="form-heading">WELCOME BACK TO THE MOVIES</h1>
+            <p class="login-subtitle" id="form-subtitle">
+              Đăng nhập để tiếp tục hành trình thưởng thức điện ảnh đỉnh cao và quản lý bộ sưu tập phim của bạn.
+            </p>
+          </div>
+
+          <!-- Auth Mode Switch Tabs (Đăng nhập / Tạo tài khoản) -->
+          <div class="auth-tabs-nav" role="tablist" aria-label="Chuyển đổi đăng nhập và tạo tài khoản">
+            <a
+              href="#login"
+              class="auth-tab-btn active"
+              id="tab-login"
+              role="tab"
+              aria-selected="true"
+              aria-controls="login-form"
+            >
+              Đăng nhập
+            </a>
+            <a
+              href="#register"
+              class="auth-tab-btn"
+              id="tab-register"
+              role="tab"
+              aria-selected="false"
+              aria-controls="register-form"
+            >
+              Tạo tài khoản
+            </a>
+          </div>
+
+          <p class="auth-demo-notice">
+            Đây là bản thử nghiệm: hãy chọn “Tạo tài khoản” để đăng ký. Tài khoản chỉ được lưu trên trình duyệt này; không dùng mật khẩu thật.
+          </p>
+
+          <!-- Global Status Message Area (Success / Warning / Error feedback) -->
+          <div
+            class="login-status-alert"
+            id="login-status"
+            role="status"
+            aria-live="polite"
+            hidden
+          ></div>
+
+          <!-- ==========================================
+               VIEW 1: FORM ĐĂNG NHẬP (SIGN IN)
+               ========================================== -->
+          <form class="auth-form active" id="login-form" novalidate>
+
+            <!-- Email Field -->
+            <div class="form-group" id="login-group-email">
+              <div class="label-wrapper">
+                <label for="login-email" class="form-label">Email</label>
+                <span class="field-required" aria-hidden="true">*</span>
+              </div>
+              <div class="input-control">
+                <span class="input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="4" width="20" height="16" rx="3"></rect>
+                    <path d="m22 7-10 6.5L2 7"></path>
+                  </svg>
+                </span>
+                <input
+                  type="email"
+                  id="login-email"
+                  name="email"
+                  class="form-input"
+                  placeholder="diachi@email.com"
+                  autocomplete="email"
+                  required
+                  aria-describedby="login-email-error"
+                >
+              </div>
+              <p class="field-error-message" id="login-email-error" aria-live="assertive" hidden></p>
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group" id="login-group-password">
+              <div class="label-wrapper">
+                <label for="login-password" class="form-label">Mật khẩu</label>
+                <span class="field-required" aria-hidden="true">*</span>
+              </div>
+              <div class="input-control">
+                <span class="input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </span>
+                <input
+                  type="password"
+                  id="login-password"
+                  name="password"
+                  class="form-input form-input-password"
+                  placeholder="Nhập mật khẩu của bạn"
+                  autocomplete="current-password"
+                  required
+                  aria-describedby="login-password-error"
+                >
+                <button
+                  type="button"
+                  class="password-toggle-btn"
+                  id="toggle-login-password"
+                  aria-label="Hiển thị mật khẩu"
+                  aria-pressed="false"
+                >
+                  <svg class="icon-eye-open" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg class="icon-eye-closed" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" hidden>
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
+              </div>
+              <p class="field-error-message" id="login-password-error" aria-live="assertive" hidden></p>
+            </div>
+
+            <!-- Form Utilities Row: Remember Me & Forgot Password -->
+            <div class="form-utils">
+              <label class="remember-label" for="login-remember">
+                <input
+                  type="checkbox"
+                  id="login-remember"
+                  name="rememberMe"
+                  class="custom-checkbox"
+                >
+                <span class="custom-checkbox-indicator" aria-hidden="true">
+                  <svg viewBox="0 0 12 10" width="12" height="10" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="1.5 5 4.5 8 10.5 2"></polyline>
+                  </svg>
+                </span>
+                <span class="checkbox-text">Ghi nhớ đăng nhập</span>
+              </label>
+
+              <a href="#forgot" class="forgot-password-link" id="forgot-password-trigger">
+                Quên mật khẩu?
+              </a>
+            </div>
+
+            <!-- Sign In Submit Button -->
+            <button
+              type="submit"
+              class="btn-cinematic-submit"
+              id="login-submit-button"
+            >
+              <span class="submit-spinner" aria-hidden="true"></span>
+              <span class="submit-text">Đăng nhập</span>
+              <svg class="submit-arrow-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+
+            <!-- Card Footer: Switch to Sign Up -->
+            <div class="login-card-footer">
+              <p class="create-account-prompt">
+                Chưa có tài khoản điện ảnh?
+                <a href="#register" class="create-account-link" id="goto-register-link">
+                  Tạo tài khoản ngay
+                </a>
+              </p>
+            </div>
+
+          </form>
+
+          <!-- ==========================================
+               VIEW 2: FORM TẠO TÀI KHOẢN (SIGN UP)
+               ========================================== -->
+          <form class="auth-form" id="register-form" novalidate hidden>
+
+            <!-- Full Name Field -->
+            <div class="form-group" id="register-group-name">
+              <div class="label-wrapper">
+                <label for="register-name" class="form-label">Họ và tên</label>
+                <span class="field-required" aria-hidden="true">*</span>
+              </div>
+              <div class="input-control">
+                <span class="input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  id="register-name"
+                  name="name"
+                  class="form-input"
+                  placeholder="Ví dụ: Nguyễn Văn A"
+                  autocomplete="name"
+                  required
+                  aria-describedby="register-name-error"
+                >
+              </div>
+              <p class="field-error-message" id="register-name-error" aria-live="assertive" hidden></p>
+            </div>
+
+            <!-- Register Email Field -->
+            <div class="form-group" id="register-group-email">
+              <div class="label-wrapper">
+                <label for="register-email" class="form-label">Email</label>
+                <span class="field-required" aria-hidden="true">*</span>
+              </div>
+              <div class="input-control">
+                <span class="input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="4" width="20" height="16" rx="3"></rect>
+                    <path d="m22 7-10 6.5L2 7"></path>
+                  </svg>
+                </span>
+                <input
+                  type="email"
+                  id="register-email"
+                  name="email"
+                  class="form-input"
+                  placeholder="diachi@email.com"
+                  autocomplete="email"
+                  required
+                  aria-describedby="register-email-error"
+                >
+              </div>
+              <p class="field-error-message" id="register-email-error" aria-live="assertive" hidden></p>
+            </div>
+
+            <!-- Register Password Field -->
+            <div class="form-group" id="register-group-password">
+              <div class="label-wrapper">
+                <label for="register-password" class="form-label">Mật khẩu</label>
+                <span class="field-required" aria-hidden="true">*</span>
+              </div>
+              <div class="input-control">
+                <span class="input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </span>
+                <input
+                  type="password"
+                  id="register-password"
+                  name="password"
+                  class="form-input form-input-password"
+                  placeholder="Tối thiểu 6 ký tự"
+                  autocomplete="new-password"
+                  required
+                  aria-describedby="register-password-error"
+                >
+                <button
+                  type="button"
+                  class="password-toggle-btn"
+                  id="toggle-register-password"
+                  aria-label="Hiển thị mật khẩu"
+                  aria-pressed="false"
+                >
+                  <svg class="icon-eye-open" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg class="icon-eye-closed" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" hidden>
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
+              </div>
+              <p class="field-error-message" id="register-password-error" aria-live="assertive" hidden></p>
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="form-group" id="register-group-confirm">
+              <div class="label-wrapper">
+                <label for="register-confirm" class="form-label">Xác nhận mật khẩu</label>
+                <span class="field-required" aria-hidden="true">*</span>
+              </div>
+              <div class="input-control">
+                <span class="input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                </span>
+                <input
+                  type="password"
+                  id="register-confirm"
+                  name="confirmPassword"
+                  class="form-input form-input-password"
+                  placeholder="Nhập lại mật khẩu ở trên"
+                  autocomplete="new-password"
+                  required
+                  aria-describedby="register-confirm-error"
+                >
+                <button
+                  type="button"
+                  class="password-toggle-btn"
+                  id="toggle-register-confirm"
+                  aria-label="Hiển thị mật khẩu xác nhận"
+                  aria-pressed="false"
+                >
+                  <svg class="icon-eye-open" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg class="icon-eye-closed" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" hidden>
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
+              </div>
+              <p class="field-error-message" id="register-confirm-error" aria-live="assertive" hidden></p>
+            </div>
+
+            <!-- Sign Up Submit Button -->
+            <button
+              type="submit"
+              class="btn-cinematic-submit"
+              id="register-submit-button"
+            >
+              <span class="submit-spinner" aria-hidden="true"></span>
+              <span class="submit-text">Tạo tài khoản ngay</span>
+              <svg class="submit-arrow-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+
+            <!-- Card Footer: Switch to Login -->
+            <div class="login-card-footer">
+              <p class="create-account-prompt">
+                Đã có tài khoản điện ảnh?
+                <a href="#login" class="create-account-link" id="goto-login-link">
+                  Đăng nhập ngay
+                </a>
+              </p>
+            </div>
+
+          </form>
+
+          <!-- Cinematic Film Reel Accent Decor -->
+          <div class="cinema-reel-accents" aria-hidden="true">
+            <span class="reel-dot"></span>
+            <span class="reel-dot"></span>
+            <span class="reel-dot"></span>
+            <span class="reel-dot"></span>
+          </div>
+
+        </div>
+
+        <!-- Cinema Quote / Mood Footnote -->
+        <aside class="cinema-quote-bar" aria-hidden="true">
+          <p class="cinema-quote-text">
+            “Cinema is a matter of what’s in the frame and what’s out.”
+          </p>
+          <span class="cinema-quote-author">— Martin Scorsese</span>
+        </aside>
+
+      </section>
+    </main>
+
+    <!-- Info Dialog Modal for Forgot Password -->
+    <div class="cinematic-dialog-backdrop" id="cinematic-dialog" role="dialog" aria-modal="true" aria-labelledby="login-dialog-title" hidden>
+      <div class="cinematic-dialog-card">
+        <button type="button" class="dialog-close-btn" id="dialog-close" aria-label="Đóng cửa sổ">×</button>
+        <div class="dialog-icon-wrapper" id="dialog-icon"></div>
+        <h2 class="dialog-title" id="login-dialog-title">Thông báo</h2>
+        <p class="dialog-content" id="dialog-content"></p>
+        <div class="dialog-actions">
+          <button type="button" class="btn-dialog-confirm" id="dialog-confirm">Đã hiểu</button>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div id="site-content" hidden>
+<a class="skip-link" href="#main-content">Đi đến nội dung chính</a>
     <header class="site-header">
       <div class="header-inner">
         <a class="brand" href="#home" aria-label="Khung Hình, về đầu trang">
@@ -28,6 +1006,10 @@
           <button class="nav-favorites" type="button" data-action="favorites">
             Yêu thích <span class="favorite-count" data-favorite-count>0</span>
           </button>
+          <div class="user-nav-profile" id="user-nav-profile">
+            <span class="user-nav-name" id="user-nav-name">Thành viên</span>
+            <button class="nav-logout-btn" id="nav-logout-btn" type="button" title="Đăng xuất khỏi hệ thống">Đăng xuất</button>
+          </div>
         </nav>
         <form class="header-search" role="search" data-search-form>
           <label class="visually-hidden" for="site-search">Tìm kiếm phim</label>
@@ -242,5 +1224,6 @@
       <div class="dialog-content" data-dialog-content></div>
     </dialog>
     <div class="toast-region" aria-live="polite" aria-atomic="true" data-toast-region></div>
+    </div>
   </body>
 </html>

@@ -2,7 +2,7 @@ const ratingSource = "https://www.rottentomatoes.com/m/";
 const imageSource = "Rotten Tomatoes / Flixster";
 const checkedAt = "2026-10-20";
 
-export const movies = [
+window.movies = [
   {
     id: "fight-club",
     title: "Fight Club",
