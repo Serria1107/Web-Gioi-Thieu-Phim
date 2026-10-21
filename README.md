@@ -17,13 +17,15 @@ Website tĩnh giới thiệu và khám phá phim, được xây dựng bằng HT
 
 ## Chạy dự án
 
-Các JavaScript module được phục vụ tốt nhất qua máy chủ HTTP cục bộ:
+Mở `index.html` trực tiếp bằng Chrome. Trang đăng nhập, tạo tài khoản và trang phim dùng chung một tệp HTML; khách chưa đăng nhập sẽ thấy màn hình đăng nhập. Các script cũng hỗ trợ chạy từ `file://`.
+
+Để chạy qua máy chủ HTTP cục bộ (khuyến nghị khi phát triển):
 
 1. Mở thư mục dự án trong Visual Studio Code.
 2. Cài và bật extension **Live Server** nếu chưa có.
 3. Nhấn chuột phải vào `index.html` → **Open with Live Server**.
 
-Không cần `npm install`, API key hoặc bước build. Dự án cũng đã được mở thử bằng browser ở URL `file://`, nhưng Live Server là cách chạy được khuyến nghị để tránh khác biệt về chính sách module giữa các trình duyệt.
+Không cần `npm install`, API key hoặc bước build.
 
 ## Cấu trúc
 
