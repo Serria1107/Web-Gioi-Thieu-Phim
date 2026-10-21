@@ -14,7 +14,6 @@ Website tĩnh giới thiệu và khám phá phim, được xây dựng bằng HT
 - Danh sách yêu thích lưu trong `localStorage` và đồng bộ giữa các tab.
 - Gợi ý lối tắt tới phim được chuyên gia/khán giả đánh giá cao, phim kinh điển và phim phát hành gần đây.
 - Responsive, trạng thái rỗng, skeleton ban đầu và placeholder khi poster không tải được.
-
 ## Chạy dự án
 
 Mở `index.html` trực tiếp bằng Chrome. Trang đăng nhập, tạo tài khoản và trang phim dùng chung một tệp HTML; khách chưa đăng nhập sẽ thấy màn hình đăng nhập. Các script cũng hỗ trợ chạy từ `file://`.
