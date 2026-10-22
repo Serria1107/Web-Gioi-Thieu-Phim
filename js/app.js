@@ -739,28 +739,10 @@ function openTrailer(movieId, trigger = document.activeElement) {
     lastFocusedElement = trigger instanceof HTMLElement ? trigger : null;
   }
 
-  const storedVideoId = movie.trailerVideoId;
-  const videoId = typeof storedVideoId === "string" && /^[\w-]{11}$/.test(storedVideoId)
-    ? storedVideoId
-    : youtubeVideoId(movie.officialTrailerUrl);
-  const sourceUrl = movie.trailerSourceUrl ?? movie.officialTrailerSource;
-  const candidateSourceUrl = movie.trailerCandidateSourceUrl;
-  const verifiedAt = movie.trailerVerifiedAt ?? movie.officialTrailerVerifiedAt;
-  const hasVerificationStatus = movie.trailerStatus !== undefined;
-  const verified = Boolean(
-    videoId
-      && isYoutubeUrl(sourceUrl)
-      && verifiedAt
-      && (!hasVerificationStatus || (movie.trailerStatus === "verified" && movie.trailerOfficial === true))
-  );
-  const unavailableMessage = movie.trailerStatus === "not_found"
-    ? "Chưa tìm thấy trailer chính thức phù hợp cho phim này."
-    : movie.trailerStatus === "needs_review"
-      ? "Chưa có trailer được xác minh; cần rà soát tên phim và kênh phát hành."
-      : "Chưa có trailer chính thức được xác minh cho phim này.";
-  const candidateMessage = movie.trailerCandidateEmbeddable
-    ? "Có trailer từ kênh chính thức nhưng cần kiểm tra thêm trước khi phát."
-    : "Đã tìm thấy trailer từ kênh chính thức nhưng video không thể phát nhúng.";
+  const videoId = youtubeVideoId(movie.officialTrailerUrl);
+  const sourceUrl = movie.officialTrailerSource;
+  const verifiedAt = movie.officialTrailerVerifiedAt;
+  const verified = Boolean(videoId && isYoutubeUrl(sourceUrl) && verifiedAt);
   const returnToDetails = elements.dialog.open
     && state.activeDialogMovieId === movieId
     && Boolean(elements.dialogContent.querySelector(".dialog-body"));
@@ -777,20 +759,10 @@ function openTrailer(movieId, trigger = document.activeElement) {
         ></iframe>
       </div>
       <p class="trailer-help">Nếu trình duyệt chặn tự phát, hãy nhấn Play trong trình phát. Nếu video không thể nhúng, xem tại <a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noreferrer">nguồn chính thức ↗</a>.</p>`
-    : movie.trailerCandidateOfficial && isYoutubeUrl(candidateSourceUrl)
-      ? `
-        <div class="trailer-unavailable" role="status">
-          <span aria-hidden="true">▶</span>
-          <p>${escapeHtml(candidateMessage)}</p>
-          <small>${movie.trailerCandidateEmbeddable
-            ? "Chỉ phát trailer sau khi dữ liệu được xác minh đầy đủ."
-            : "Không phát video không cho phép nhúng."}</small>
-        </div>
-        <p class="trailer-help"><a href="${escapeHtml(candidateSourceUrl)}" target="_blank" rel="noreferrer">Xem tại nguồn chính thức ↗</a></p>`
     : `
       <div class="trailer-unavailable" role="status">
         <span aria-hidden="true">▶</span>
-        <p>${escapeHtml(unavailableMessage)}</p>
+        <p>Chưa có trailer chính thức được xác minh cho phim này.</p>
         <small>Chúng tôi không phát video chưa rõ nguồn hoặc không đúng phiên bản phim.</small>
       </div>`;
 

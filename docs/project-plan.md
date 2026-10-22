@@ -14,7 +14,7 @@ Giữ nguyên HTML/CSS/JavaScript thuần theo `.skill/skill.md`; không thêm d
 | Dữ liệu phim | Hoàn tất với giới hạn | Có 24 phim, ID ổn định, poster và đường dẫn nguồn điểm; dữ liệu điểm có ngày kiểm tra |
 | Khám phá danh mục | Hoàn tất | Tìm kiếm không dấu, lọc kết hợp, sắp xếp và phân trang dùng chung một pipeline |
 | Flip card và chi tiết | Hoàn tất | Lật bằng button, modal có thể đóng bằng nút/Escape/overlay và khôi phục focus |
-| Trailer và đồng bộ cục bộ | Tích hợp giao diện và script; dữ liệu chưa được đồng bộ | Dialog dùng chung; iframe chỉ tạo khi mở; script tra cứu TMDB/YouTube, yêu cầu channel ID tin cậy và lưu ứng viên theo Movie ID; phim chưa xác minh không phát |
+| Trailer modal | Hoàn tất phần giao diện | Một dialog dùng chung, iframe chỉ tạo khi mở; dữ liệu phim hiện chưa có trailer đã xác minh nên báo trạng thái chưa có |
 | Điểm cộng đồng và tổng hợp | Hoàn tất chế độ demo | Điểm 1–10 lưu cục bộ, mỗi trình duyệt một điểm/phim; tính trung bình 50/50 khi đủ nguồn |
 | Bình luận phim | Hoàn tất chế độ demo | Lưu theo ID phim tại localStorage; có spoiler, sửa/xóa, sắp xếp, thích/báo cáo cục bộ |
 | Giới thiệu chính thức | Chưa có nội dung đã xác minh | Modal không giả định tóm tắt biên soạn là lời giới thiệu của hãng |
@@ -30,8 +30,6 @@ Giữ nguyên HTML/CSS/JavaScript thuần theo `.skill/skill.md`; không thêm d
 - `index.html`: cấu trúc semantic, controls, trạng thái ban đầu và dialog.
 - `css/style.css`: tokens màu/kiểu chữ, glass panels, flip 3D, responsive, reduced motion.
 - `js/movies.js`: dữ liệu tĩnh, tách khỏi DOM.
-- `js/trailer-data.js`: manifest trailer sinh bởi đồng bộ cục bộ; không chứa API credentials.
-- `scripts/sync-trailers.js`: tìm kiếm/xác minh dữ liệu trailer bằng TMDB và YouTube Data API, có cache trạng thái và báo cáo theo phim.
 - `js/app.js`: trạng thái ứng dụng và pipeline tìm kiếm → lọc → sắp xếp → phân trang → render.
 - `js/community.js`: validation, localStorage demo và phép tính điểm nội bộ/tổng hợp.
 - `docs/`: hướng dẫn kiểm thử, AI và thuyết trình.
@@ -40,8 +38,8 @@ Giữ nguyên HTML/CSS/JavaScript thuần theo `.skill/skill.md`; không thêm d
 
 | Cột | Công việc |
 |---|---|
-| Done trong lần triển khai này | Giao diện; dữ liệu tĩnh; bộ lọc và pagination; flip/modal; favorites; trailer fallback; script đồng bộ trailer cục bộ; dashboard điểm; community demo; kiểm tra browser |
-| To Do | Cấu hình API credentials và channel ID tin cậy; chạy đồng bộ 24 phim và rà soát ứng viên; xác minh/nhập lời giới thiệu/backdrop; chọn backend/Auth nếu cần dữ liệu người dùng thật; bổ sung test tự động khi có runner |
+| Done trong lần triển khai này | Giao diện; dữ liệu tĩnh; bộ lọc và pagination; flip/modal; favorites; trailer fallback; dashboard điểm; community demo; kiểm tra browser |
+| To Do | Xác minh và nhập nguồn trailer/giới thiệu/backdrop; chọn backend/Auth nếu cần dữ liệu người dùng thật; bổ sung test tự động khi có runner |
 | Review | Chủ dự án rà soát chính xác dữ liệu, chính sách ảnh và mức độ phù hợp rubric |
 | Backlog | Tích hợp API có xác thực phía server nếu cần cập nhật dữ liệu định kỳ; triển khai CI khi repository có quy trình |
 

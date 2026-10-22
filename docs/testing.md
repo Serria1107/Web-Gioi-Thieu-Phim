@@ -26,13 +26,6 @@ Mở `index.html` trong browser tích hợp VS Code ở chế độ `file://` v�
 
 Đây là kiểm tra thủ công trong browser, không phải bộ test hồi quy có thể chạy tự động.
 
-## Đồng bộ trailer trong lần cập nhật này
-
-- Mở trang sau khi thêm manifest trailer trống: danh mục vẫn render đủ 24 phim; nút trailer mở dialog trạng thái `needs_review`, không tạo iframe.
-- Nhấn Escape đóng dialog và gỡ nội dung iframe khỏi DOM.
-- Tìm “shawshank” với cỡ trang “Tất cả” vẫn trả về đúng một phim; không thấy lỗi JavaScript trong lượt browser này.
-- Chưa chạy `scripts/sync-trailers.js`: Node.js/npm và API credentials không có trong môi trường hiện tại. Vì vậy chưa truy vấn TMDB/YouTube, chưa ghi nhận trailer nào là đã xác minh, và chưa tạo báo cáo kết quả theo từng phim. `js/trailer-data.js` hiện rỗng có chủ ý; các phim hiện tại không được giả định là đã tìm kiếm hoặc xác minh.
-
 ## Kiểm tra thủ công bổ sung trong phiên cập nhật
 
 - Đánh giá demo: chọn điểm, cập nhật cùng một bản ghi, xác nhận không tạo đánh giá trùng; ví dụ 90% bên ngoài và 8/10 nội bộ cho 8.5/10. Dữ liệu thiếu không tạo điểm tổng hợp.
@@ -44,7 +37,7 @@ Mở `index.html` trong browser tích hợp VS Code ở chế độ `file://` v�
 
 ## Giới hạn môi trường
 
-Không có `python`, `node` hoặc `npm` trên PATH nên không thể chạy `python -m http.server`, `node --check`, npm scripts hoặc test runner. Vì vậy browser được mở trực tiếp từ file; chưa xác minh bằng Live Server trên máy này. Dự án chưa khai báo dependency hoặc test runner; `package.json` chỉ cung cấp lệnh chạy script đồng bộ.
+Không có `python` hoặc `node` trên PATH nên không thể chạy `python -m http.server`, `node --check`, npm scripts hoặc test runner. Vì vậy browser được mở trực tiếp từ file; chưa xác minh bằng Live Server trên máy này. Dự án không khai báo npm dependencies hoặc test scripts.
 
 Chưa chạy Lighthouse, kiểm thử screen reader thực tế, audit accessibility tự động, GitHub Actions hoặc kiểm thử ở nhiều trình duyệt vật lý. Screenshot chỉ được dùng để xem UI trong phiên, không lưu làm deliverable.
 

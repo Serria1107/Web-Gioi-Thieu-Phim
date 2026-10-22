@@ -1,5 +1,3 @@
-import { trailerData } from "./trailer-data.js";
-
 const ratingSource = "https://www.rottentomatoes.com/m/";
 const imageSource = "Rotten Tomatoes / Flixster";
 const checkedAt = "2026-10-20";
@@ -415,46 +413,23 @@ const movieRecords = [
   }
 ];
 
-export const movies = movieRecords.map((movie) => {
-  const trailer = trailerData[movie.id] ?? {};
-  const verified = trailer.trailerStatus === "verified";
-  const trailerVideoId = verified ? trailer.trailerVideoId : null;
-
-  return {
-    ...movie,
-    shortOverview: movie.summary,
-    backdrop: null,
-    officialIntroduction: null,
-    officialIntroductionSource: null,
-    officialIntroductionType: "unverified",
-    officialIntroductionVerifiedAt: null,
-    tmdbId: trailer.tmdbId ?? null,
-    trailerVideoId,
-    trailerTitle: verified ? trailer.trailerTitle : null,
-    trailerPlatform: trailer.trailerPlatform ?? null,
-    trailerSourceUrl: verified ? trailer.trailerSourceUrl : null,
-    trailerChannel: verified ? trailer.trailerChannel : null,
-    trailerChannelId: verified ? trailer.trailerChannelId : null,
-    trailerOfficial: verified && trailer.trailerOfficial === true,
-    trailerVerifiedAt: verified ? trailer.trailerVerifiedAt : null,
-    trailerStatus: trailer.trailerStatus ?? "needs_review",
-    trailerCandidateOfficial: trailer.trailerCandidateOfficial === true,
-    trailerCandidateSourceUrl: trailer.trailerCandidateOfficial === true && trailer.trailerCandidateVideoId
-      ? `https://www.youtube.com/watch?v=${encodeURIComponent(trailer.trailerCandidateVideoId)}`
-      : null,
-    trailerCandidateEmbeddable: trailer.trailerCandidateEmbeddable === true,
-    officialTrailerUrl: trailerVideoId
-      ? `https://www.youtube.com/watch?v=${encodeURIComponent(trailerVideoId)}`
-      : null,
-    officialTrailerSource: verified ? trailer.trailerSourceUrl : null,
-    officialTrailerVerifiedAt: verified ? trailer.trailerVerifiedAt : null,
-    criticScore: movie.ratings?.critics ?? null,
-    criticScoreSource: "Rotten Tomatoes Tomatometer",
-    criticScoreScale: "0–100%",
-    criticScoreScale: "0–100%",
-    externalAudienceScore: movie.ratings?.audience ?? null,
-    externalAudienceSource: "Rotten Tomatoes Popcornmeter",
-    externalAudienceScale: "0–100%",
-    externalAudienceVerifiedAt: movie.ratingCheckedAt
-  };
-});
+export const movies = movieRecords.map((movie) => ({
+  ...movie,
+  shortOverview: movie.summary,
+  backdrop: null,
+  officialIntroduction: null,
+  officialIntroductionSource: null,
+  officialIntroductionType: "unverified",
+  officialIntroductionVerifiedAt: null,
+  officialTrailerUrl: null,
+  officialTrailerSource: null,
+  officialTrailerVerifiedAt: null,
+  criticScore: movie.ratings?.critics ?? null,
+  criticScoreSource: "Rotten Tomatoes Tomatometer",
+  criticScoreScale: "0–100%",
+  criticScoreScale: "0–100%",
+  externalAudienceScore: movie.ratings?.audience ?? null,
+  externalAudienceSource: "Rotten Tomatoes Popcornmeter",
+  externalAudienceScale: "0–100%",
+  externalAudienceVerifiedAt: movie.ratingCheckedAt
+}));
