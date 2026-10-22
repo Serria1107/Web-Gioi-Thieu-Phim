@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Thông tin phim, điểm đánh giá có nguồn và cảm nhận của bạn tại Khung Hình.">
+  <title>Chi tiết phim — Khung Hình</title>
+  <script src="js/theme.js"></script>
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/movies.js" defer></script>
+  <script src="js/list.js" defer></script>
+  <script src="js/scores.js" defer></script>
+  <script src="js/storage.js" defer></script>
+  <script src="js/reviews.js" defer></script>
+  <script src="js/movie-detail.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Đi đến nội dung</a>
+  <header class="site-header"><div class="header-inner container">
+    <a class="brand" href="index.html" aria-label="Khung Hình — Trang chủ"><span class="brand-mark" aria-hidden="true"><i></i></span><span>khung hình<span class="brand-caption">MỘT KHÔNG GIAN ĐIỆN ẢNH</span></span></a>
+    <nav class="main-nav" aria-label="Điều hướng chính"><a href="index.html">Trang chủ</a><a href="index.html#catalog">Khám phá phim</a><a href="index.html#genre">Danh mục phim</a></nav>
+    <div class="header-actions"><a class="icon-button search-shortcut" href="index.html#search" aria-label="Tìm kiếm phim"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></a><span class="header-divider" aria-hidden="true"></span><button class="login-button" type="button" title="Chức năng đăng nhập sẽ được phát triển sau">Đăng nhập</button><button class="icon-button theme-button" type="button" data-theme-toggle aria-label="Chuyển chế độ sáng tối"><span data-theme-symbol aria-hidden="true">☾</span></button></div>
+  </div></header>
+  <main id="main">
+    <div id="detail-root"></div>
+    <section class="reviews-section container" id="reviews-section" aria-labelledby="reviews-heading" hidden>
+      <div class="section-topline"><span class="eyebrow">03 <span class="eyebrow-line"></span> GÓC NHÌN CỦA BẠN</span></div>
+      <div class="section-heading"><h2 id="reviews-heading">Bạn thấy bộ phim thế nào?</h2><p>Một góc nhìn riêng, một cảm xúc thật.</p></div>
+      <p class="local-note">Review chỉ được lưu trong trình duyệt hiện tại. Đây chưa phải hệ thống chia sẻ đánh giá giữa nhiều người dùng hoặc thiết bị.</p>
+      <p class="storage-notice" id="storage-notice" role="status" hidden></p>
+      <div class="reviews-layout">
+        <div class="review-form-panel glass">
+          <div class="eyebrow">VIẾT CẢM NHẬN</div><h3 id="form-heading">Lưu lại góc nhìn của bạn.</h3>
+          <form id="review-form" novalidate>
+            <label class="form-field"><span>Tên của bạn <span aria-hidden="true">*</span></span><input id="review-author" name="author" required maxlength="80" autocomplete="name" aria-describedby="review-author-error"><small class="field-error" id="review-author-error"></small></label>
+            <label class="form-field"><span>Tiêu đề cảm nhận <span aria-hidden="true">*</span></span><input id="review-title" name="title" required maxlength="120" placeholder="Điều đọng lại sau bộ phim…" aria-describedby="review-title-error"><small class="field-error" id="review-title-error"></small></label>
+            <label class="form-field"><span>Điểm của bạn (1–10) <span aria-hidden="true">*</span></span><input id="review-score" name="score" type="number" required min="1" max="10" step="any" inputmode="decimal" placeholder="Ví dụ: 8.5" aria-describedby="review-score-error"><small class="field-error" id="review-score-error"></small></label>
+            <label class="form-field"><span>Nội dung cảm nhận <span aria-hidden="true">*</span></span><textarea id="review-body" name="body" required maxlength="3000" rows="5" placeholder="Bộ phim đã để lại điều gì trong bạn?" aria-describedby="review-body-error"></textarea><small class="field-error" id="review-body-error"></small></label>
+            <div class="form-actions"><button class="button button-accent" type="submit" id="review-submit">Gửi đánh giá <span aria-hidden="true">↗</span></button><button class="button button-outline" id="cancel-edit" type="button" hidden>Hủy sửa</button></div>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+        <div class="review-list-panel">
+          <div class="review-list-heading"><h3>Cảm nhận đã lưu</h3><span class="count-pill" id="review-count">0</span></div>
+          <div class="review-list-controls glass">
+            <label class="form-field"><span>Tìm theo tiêu đề review</span><input id="review-search" type="search" maxlength="200" placeholder="Tìm một cảm nhận…"></label>
+            <div class="review-filter-row"><label class="field"><span>Mức điểm</span><select id="review-filter"><option value="">Tất cả</option></select></label><label class="field"><span>Sắp xếp</span><select id="review-sort"><option value="asc">Tiêu đề A–Z</option><option value="desc">Tiêu đề Z–A</option></select></label><label class="field"><span>Hiển thị</span><select id="review-size"><option value="10">10 review</option><option value="20">20 review</option><option value="50">50 review</option><option value="all">Tất cả</option></select></label></div>
+            <button class="clear-button" id="review-clear" type="button">Xóa bộ lọc ↺</button>
+          </div>
+          <div class="review-results" id="review-results" role="status" aria-live="polite"></div>
+          <div id="review-list" class="review-list"></div>
+          <nav class="pagination review-pagination" id="review-pagination" aria-label="Phân trang review"></nav>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="container footer-inner"><a class="brand footer-brand" href="index.html"><span class="brand-mark" aria-hidden="true"><i></i></span><span>khung hình</span></a><p>Một không gian dành cho tình yêu điện ảnh.</p><a href="docs/sources.md">Nguồn dữ liệu & hình ảnh ↗</a><span>© 2026 KHUNG HÌNH</span></div></footer>
+  <noscript><p class="noscript-note">Bật JavaScript để xem thông tin phim và sử dụng đánh giá.</p></noscript>
+</body>
+</html>

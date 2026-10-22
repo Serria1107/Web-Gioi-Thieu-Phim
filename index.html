@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Khung Hình — khám phá điện ảnh, đối chiếu điểm đánh giá và lưu lại cảm nhận của bạn.">
+  <title>Khung Hình — Điện ảnh ở lại cùng bạn</title>
+  <script src="js/theme.js"></script>
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/movies.js" defer></script>
+  <script src="js/list.js" defer></script>
+  <script src="js/scores.js" defer></script>
+  <script src="js/storage.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Đi đến nội dung</a>
+  <header class="site-header">
+    <div class="header-inner container">
+      <a class="brand" href="index.html" aria-label="Khung Hình — Trang chủ"><span class="brand-mark" aria-hidden="true"><i></i></span><span>khung hình<span class="brand-caption">MỘT KHÔNG GIAN ĐIỆN ẢNH</span></span></a>
+      <nav class="main-nav" aria-label="Điều hướng chính">
+        <a class="active" href="index.html" aria-current="page">Trang chủ</a>
+        <a href="#catalog">Khám phá phim</a>
+        <label class="nav-category"><span class="sr-only">Danh mục phim theo thể loại</span><select id="nav-genre" aria-label="Danh mục phim"><option value="">Danh mục phim</option></select></label>
+      </nav>
+      <div class="header-actions">
+        <a class="icon-button search-shortcut" href="#search" aria-label="Tìm kiếm phim"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <button class="login-button" type="button" title="Chức năng đăng nhập sẽ được phát triển sau">Đăng nhập</button>
+        <button class="icon-button theme-button" type="button" data-theme-toggle aria-label="Chuyển chế độ sáng tối"><span data-theme-symbol aria-hidden="true">☾</span></button>
+      </div>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <img class="hero-image" src="images/backdrops/top-gun-maverick.jpg" alt="Top Gun: Maverick — ảnh quảng bá chính thức từ Paramount" fetchpriority="high" width="1800" height="600">
+      <div class="hero-shade"></div>
+      <div class="hero-content container">
+        <div class="eyebrow hero-eyebrow"><span class="live-dot"></span> ĐIỂM HẸN ĐIỆN ẢNH <span class="eyebrow-line"></span> TUYỂN CHỌN 01</div>
+        <p class="hero-pretitle">Bầu trời không phải giới hạn.</p>
+        <h1 id="hero-title">TOP GUN:<br><em>MAVERICK</em></h1>
+        <div class="hero-meta"><span>2022</span><span class="meta-dot">·</span><span>131 phút</span><span class="meta-dot">·</span><span>Hành động / Phiêu lưu</span></div>
+        <p class="hero-description">Maverick trở lại TOP GUN để huấn luyện một thế hệ phi công mới, đối mặt với quá khứ và nhiệm vụ thử thách mọi giới hạn.</p>
+        <div class="hero-actions"><a class="button button-accent" href="movie.html?id=top-gun-maverick">Khám phá bộ phim <span aria-hidden="true">↗</span></a><a class="hero-secondary" href="#catalog">Tìm cảm hứng tiếp theo <span aria-hidden="true">↓</span></a></div>
+        <div class="hero-scores" id="hero-scores" aria-label="Điểm đánh giá Top Gun: Maverick"></div>
+      </div>
+      <div class="hero-foot container"><span>ĐIỆN ẢNH MỞ RA NHỮNG GÓC NHÌN MỚI.</span><a href="#catalog" aria-label="Cuộn tới thư viện phim">KHÁM PHÁ <span aria-hidden="true">↓</span></a></div>
+    </section>
+    <section class="catalog-section container" id="catalog" aria-labelledby="catalog-title">
+      <div class="section-topline"><span class="eyebrow">01 <span class="eyebrow-line"></span> THƯ VIỆN PHIM</span><span class="small-note" id="collection-count">Những câu chuyện đáng khám phá</span></div>
+      <div class="section-heading"><div><h2 id="catalog-title">Một bộ phim.<br><span>Một thế giới khác.</span></h2></div><p>Từ những khung hình kinh điển đến góc nhìn độc lập.<br>Khám phá, đối chiếu đánh giá và viết nên cảm nhận của riêng bạn.</p></div>
+      <div class="catalog-toolbar glass">
+        <label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span class="sr-only">Tìm kiếm theo tiêu đề phim</span><input id="search" type="search" placeholder="Bạn muốn xem phim gì?" autocomplete="off" maxlength="200"></label>
+        <div class="filters-row">
+          <label class="field"><span>Thể loại</span><select id="genre"><option value="">Tất cả thể loại</option></select></label>
+          <label class="field"><span>Năm phát hành</span><select id="year"><option value="">Tất cả năm</option></select></label>
+          <label class="field"><span>Quốc gia</span><select id="country"><option value="">Tất cả quốc gia</option></select></label>
+          <button class="clear-button" id="clear-filters" type="button">Xóa bộ lọc <span aria-hidden="true">↺</span></button>
+        </div>
+      </div>
+      <div class="results-toolbar"><p id="results-summary" role="status" aria-live="polite"></p><div class="list-settings"><label class="compact-field"><span>Sắp xếp</span><select id="sort"><option value="asc">Tiêu đề A–Z</option><option value="desc">Tiêu đề Z–A</option></select></label><label class="compact-field"><span>Hiển thị</span><select id="page-size"><option value="10">10 phim</option><option value="20">20 phim</option><option value="50">50 phim</option><option value="all">Tất cả</option></select></label></div></div>
+      <p class="interaction-hint"><span aria-hidden="true">↻</span> Nhấn vào poster để lật thẻ và khám phá thêm.</p>
+      <div id="movie-grid" class="movie-grid"></div>
+      <div id="empty-state" class="empty-state glass" hidden><span class="empty-symbol" aria-hidden="true">⌕</span><h3>Không có kết quả phù hợp</h3><p>Thử một tiêu đề khác hoặc điều chỉnh bộ lọc của bạn.</p></div>
+      <nav id="pagination" class="pagination" aria-label="Phân trang phim"></nav>
+      <p class="data-caption">Điểm bên ngoài là dữ liệu đã kiểm tra, không cập nhật trực tiếp. Điểm nội bộ chỉ phản ánh review trong trình duyệt của bạn.</p>
+    </section>
+    <section class="editorial-note container"><div class="eyebrow">KHÔNG CHỈ LÀ MỘT ĐIỂM SỐ</div><p>Phim kết thúc.<br><em>Cảm xúc còn ở lại.</em></p><span>Mỗi góc nhìn làm nên một trải nghiệm điện ảnh khác biệt.<br>Hãy mở một bộ phim và để lại câu chuyện của bạn.</span><a class="text-link" href="#catalog">Tìm một câu chuyện <span aria-hidden="true">↗</span></a></section>
+  </main>
+  <footer class="site-footer"><div class="container footer-inner"><a class="brand footer-brand" href="index.html"><span class="brand-mark" aria-hidden="true"><i></i></span><span>khung hình</span></a><p>Một không gian dành cho tình yêu điện ảnh.</p><a href="docs/sources.md">Nguồn dữ liệu & hình ảnh ↗</a><span>© 2026 KHUNG HÌNH</span></div></footer>
+  <noscript><p class="noscript-note">Bật JavaScript để tìm kiếm phim, xem chi tiết và sử dụng đánh giá.</p></noscript>
+</body>
+</html>
