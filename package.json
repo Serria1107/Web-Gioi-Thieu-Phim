@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "engines": {
+    "node": ">=18.17"
+  },
+  "type": "module",
+  "scripts": {
+    "sync:trailers": "node scripts/sync-trailers.js"
+  }
+}
