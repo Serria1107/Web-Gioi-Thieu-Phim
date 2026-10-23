@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Hồ sơ cá nhân, những bộ phim đã lưu và cảm nhận của bạn tại Khung Hình.">
+  <title>Hồ sơ của tôi — Khung Hình</title>
+  <script src="js/theme.js"></script>
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/account.css">
+  <script src="js/movies.js" defer></script>
+  <script src="js/list.js" defer></script>
+  <script src="js/scores.js" defer></script>
+  <script src="js/storage.js" defer></script>
+  <script src="js/avatar.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/watchlist.js" defer></script>
+  <script src="js/profile.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Đi đến nội dung</a>
+  <header class="site-header"><div class="header-inner container">
+    <a class="brand" href="index.html" aria-label="Khung Hình — Trang chủ"><span class="brand-mark" aria-hidden="true"><i></i></span><span>khung hình<span class="brand-caption">MỘT KHÔNG GIAN ĐIỆN ẢNH</span></span></a>
+    <nav class="main-nav" aria-label="Điều hướng chính"><a href="index.html">Trang chủ</a><a href="index.html#catalog">Khám phá phim</a><a class="active" href="profile.html" aria-current="page">Hồ sơ</a></nav>
+    <div class="header-actions"><a class="icon-button search-shortcut" href="index.html#search" aria-label="Tìm kiếm phim"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></a><span class="header-divider" aria-hidden="true"></span><button class="login-button" type="button">Đăng nhập</button><button class="icon-button theme-button" type="button" data-theme-toggle aria-label="Chuyển chế độ sáng tối"><span data-theme-symbol aria-hidden="true">☾</span></button></div>
+  </div></header>
+  <main id="main" class="container account-page">
+    <section class="account-signin glass" id="profile-signin" hidden aria-labelledby="profile-signin-title">
+      <p class="eyebrow">KHUNG HÌNH / GÓC RIÊNG CỦA BẠN</p><h1 id="profile-signin-title">Đăng nhập để mở hồ sơ.</h1>
+      <p>Những bộ phim bạn lưu, những cảm nhận bạn viết — cùng ở một nơi.</p>
+      <button class="button button-accent" id="profile-login" type="button">Đăng nhập</button>
+    </section>
+    <div id="profile-private" hidden>
+      <section class="profile-hero" aria-labelledby="profile-name">
+        <div class="profile-banner" aria-hidden="true"><span>KHUNG HÌNH / NHỮNG CÂU CHUYỆN CỦA BẠN</span></div>
+        <div class="profile-identity"><div id="profile-avatar"></div><div class="profile-heading"><p class="eyebrow" id="profile-username"></p><h1 id="profile-name"></h1><p id="profile-email" class="muted-copy"></p><p id="profile-joined" class="muted-copy"></p></div><a class="button button-outline" href="profile-edit.html">Chỉnh sửa hồ sơ ↗</a></div>
+        <p class="profile-bio" id="profile-bio"></p>
+      </section>
+      <section class="profile-stats" aria-label="Thống kê tài khoản">
+        <a class="profile-stat glass" href="watchlist.html"><strong id="stat-watchlist">0</strong><span>Phim muốn xem</span></a>
+        <div class="profile-stat glass"><strong id="stat-reviews">0</strong><span>Bài đánh giá</span></div>
+        <div class="profile-stat glass"><strong id="stat-average">—</strong><span>Điểm trung bình / 5 sao</span></div>
+        <div class="profile-stat glass"><strong id="stat-movies">0</strong><span>Phim đã đánh giá</span></div>
+      </section>
+      <div class="profile-tabs" role="tablist" aria-label="Nội dung hồ sơ">
+        <button id="tab-overview" role="tab" type="button" aria-selected="true" aria-controls="profile-panel" tabindex="0" data-tab="overview">Tổng quan</button>
+        <button id="tab-watchlist" role="tab" type="button" aria-selected="false" aria-controls="profile-panel" tabindex="-1" data-tab="watchlist">Watchlist</button>
+        <button id="tab-reviews" role="tab" type="button" aria-selected="false" aria-controls="profile-panel" tabindex="-1" data-tab="reviews">Đánh giá của tôi</button>
+      </div>
+      <section id="profile-panel" role="tabpanel" aria-labelledby="tab-overview" tabindex="0">
+        <div class="profile-panel-heading"><div><p class="eyebrow" id="profile-section-label"></p><h2 id="profile-section-title"></h2><p id="profile-section-copy"></p></div><a class="text-link" id="profile-view-all" href="watchlist.html" hidden>Xem tất cả Watchlist ↗</a></div>
+        <div id="profile-controls" class="profile-list-tools glass"></div>
+        <p id="profile-results" class="review-results" role="status" aria-live="polite"></p>
+        <p id="profile-storage-notice" class="storage-notice" role="status" hidden></p>
+        <div id="profile-list"></div>
+        <nav id="profile-pagination" class="pagination" aria-label="Phân trang nội dung hồ sơ"></nav>
+      </section>
+    </div>
+    <p class="local-note account-local-note">Hồ sơ demo chỉ lưu trong trình duyệt này. Quyền truy cập ở đây được kiểm soát qua giao diện, không phải bảo vệ dữ liệu ở cấp máy chủ.</p>
+  </main>
+  <footer class="site-footer"><div class="container footer-inner"><a class="brand footer-brand" href="index.html"><span class="brand-mark" aria-hidden="true"><i></i></span><span>khung hình</span></a><p>Một không gian dành cho tình yêu điện ảnh.</p><a href="docs/sources.md">Nguồn dữ liệu & hình ảnh ↗</a><span>© 2026 KHUNG HÌNH</span></div></footer>
+  <noscript><p class="noscript-note">Bật JavaScript để sử dụng hồ sơ cá nhân.</p></noscript>
+</body>
+</html>

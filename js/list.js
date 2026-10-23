@@ -20,8 +20,20 @@
         return Array.isArray(field) ? field.some(entry => String(entry) === String(value)) : String(field) === String(value);
       }))
       .sort((a, b) => {
-        const comparison = collator.compare(a.item.title, b.item.title);
-        return (state.sort === 'desc' ? -comparison : comparison) || a.index - b.index;
+        let comparison;
+        if (state.sort === 'added-desc' || state.sort === 'added-asc') {
+          comparison = (Date.parse(a.item.addedAt) || 0) - (Date.parse(b.item.addedAt) || 0);
+          if (state.sort === 'added-desc') comparison = -comparison;
+        } else if (state.sort === 'rating-desc' || state.sort === 'rating-asc') {
+          const left = Number.isFinite(a.item.listRating) ? a.item.listRating : null;
+          const right = Number.isFinite(b.item.listRating) ? b.item.listRating : null;
+          comparison = left == null ? (right == null ? 0 : 1) : right == null ? -1 : left - right;
+          if (left != null && right != null && state.sort === 'rating-desc') comparison = -comparison;
+        } else {
+          comparison = collator.compare(a.item.title, b.item.title);
+          if (state.sort === 'desc') comparison = -comparison;
+        }
+        return comparison || a.index - b.index;
       }).map(({ item }) => item);
     const total = matched.length;
     const size = state.size === 'all' ? 'all' : ([10, 20, 50].includes(Number(state.size)) ? Number(state.size) : 10);

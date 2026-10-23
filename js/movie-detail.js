@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const { movies, list, scores, storage, reviews, dom: { el, link, imageFallback } } = window.KH;
+  const { movies, list, scores, storage, reviews, auth, dom: { el, link, imageFallback } } = window.KH;
   const root = document.getElementById('detail-root');
   const params = new URLSearchParams(location.search);
   const movie = movies.find(item => item.id === params.get('id'));
@@ -32,7 +32,28 @@
   const meta = el('div', 'detail-meta');
   for (const value of [movie.year, movie.runtime ? `${movie.runtime} phút` : 'Chưa xác minh thời lượng', movie.countries?.join(' / ') || 'Chưa xác minh quốc gia']) meta.append(el('span', '', value));
   const genres = el('div', 'genre-tags'); (movie.genres || []).forEach(genre => genres.append(el('span', 'genre-tag', genre)));
-  info.append(meta, genres, el('p', 'detail-summary', movie.summary || 'Chưa có nội dung giới thiệu đã xác minh.'), link('Viết cảm nhận của bạn ↗', '#reviews-section', 'button button-accent'));
+  const detailActions = el('div', 'detail-actions');
+  detailActions.append(link('Viết cảm nhận của bạn ↗', '#reviews-section', 'button button-accent'));
+  const watchlistButton = el('button', 'button button-outline watchlist-toggle'); watchlistButton.type = 'button';
+  watchlistButton.addEventListener('click', async () => {
+    if (watchlistButton.disabled) return;
+    const account = auth.get();
+    if (!account) { auth.requestLogin(movie.id); return; }
+    watchlistButton.disabled = true; watchlistButton.setAttribute('aria-busy', 'true'); watchlistButton.textContent = 'Đang cập nhật…';
+    try {
+      const exists = auth.getWatchlist().some(entry => entry.movieId === movie.id);
+      if (exists) { await auth.removeFromWatchlist(movie.id); auth.showToast('Đã xóa phim khỏi Watchlist.'); }
+      else { await auth.addToWatchlist(movie.id); auth.showToast('Đã thêm phim vào Watchlist.'); }
+    } catch (error) { auth.showToast(error.message); }
+    finally { watchlistButton.disabled = false; watchlistButton.removeAttribute('aria-busy'); renderWatchlistButton(); }
+  });
+  function renderWatchlistButton() {
+    const saved = auth.getWatchlist().some(entry => entry.movieId === movie.id);
+    watchlistButton.textContent = saved ? '✓ Đã thêm vào Watchlist' : '+ Watchlist';
+    watchlistButton.setAttribute('aria-pressed', String(saved));
+  }
+  auth.subscribe(renderWatchlistButton); renderWatchlistButton(); detailActions.append(watchlistButton);
+  info.append(meta, genres, el('p', 'detail-summary', movie.summary || 'Chưa có nội dung giới thiệu đã xác minh.'), detailActions);
   const mobileDescription = el('div', 'detail-description-wrap'); mobileDescription.append(el('p', 'detail-summary', movie.summary || 'Chưa có nội dung giới thiệu đã xác minh.'));
   main.append(posterColumn, info, mobileDescription); body.append(main);
   const facts = el('dl', 'detail-facts');
@@ -109,5 +130,8 @@
   check.append(link('Thông tin phim ↗', movie.sources.info, '', true), link('Quốc gia / chi tiết ↗', movie.sources.countries, '', true), link('Thời lượng theo nguồn ↗', movie.sources.runtime, '', true));
   section.append(check); body.append(section); root.append(backdrop, body);
   document.getElementById('reviews-section').hidden = false;
-  renderScores(); storage.subscribe(renderScores); reviews.mount(movie);
+  renderScores(); storage.subscribe(renderScores);
+  const reviewUI = reviews.mount(movie);
+  const requestedReview = params.get('review');
+  if (requestedReview && !reviewUI.edit(requestedReview)) auth.showToast('Không thể mở bài đánh giá này để chỉnh sửa.');
 })();

@@ -258,3 +258,100 @@ input[aria-invalid="true"], textarea[aria-invalid="true"] { border-color: var(--
 }
 @media (min-width: 641px) { .detail-description-wrap { display: none; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; }.poster-front:hover, .button:hover { transform: none; } }
+
+.account-menu-wrap { position: relative; }
+.account-trigger { display: inline-flex; align-items: center; gap: 8px; max-width: 210px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 30px; background: var(--glass-fallback); color: var(--ink); font-size: 11px; font-weight: 600; }
+.account-avatar { display: inline-grid; flex: 0 0 auto; place-items: center; width: 29px; height: 29px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 12px; font-weight: 700; }
+.account-avatar, .review-avatar { overflow: hidden; }
+.account-avatar img, .review-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.account-trigger-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.watchlist-count { display: inline-grid; min-width: 20px; height: 20px; place-items: center; padding-inline: 4px; border-radius: 20px; background: var(--accent); color: var(--accent-ink); font-size: 10px; }
+.account-menu { position: absolute; z-index: 40; top: calc(100% + 9px); right: 0; min-width: 205px; padding: 7px; border-radius: 7px; }
+.account-menu-item { display: block; width: 100%; padding: 10px 12px; border: 0; border-radius: 4px; background: transparent; color: var(--ink); text-align: left; font: inherit; font-size: 11px; }
+.account-menu-item:hover { background: var(--accent-soft); color: var(--accent); }
+.account-dialog { width: min(500px, calc(100% - 30px)); max-width: none; max-height: min(90dvh, 760px); padding: 0; overflow-y: auto; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: var(--surface); }
+.account-dialog::backdrop { background: rgba(5, 10, 8, .68); backdrop-filter: blur(5px); }
+.account-dialog-content { padding: 30px; border-radius: 9px; }
+.account-dialog-content > .eyebrow { color: var(--accent); }
+.account-dialog-title { margin: 10px 36px 22px 0; font-size: 26px; font-weight: 550; line-height: 1.25; }
+.dialog-close { position: absolute; z-index: 1; top: 13px; right: 13px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); color: var(--ink); font-size: 10px; }
+.account-form { display: grid; gap: 13px; }
+.account-form .form-field { position: relative; margin: 0; }
+.account-form .form-field > input { padding-right: 58px; }
+.password-row { position: relative; display: block; }
+.account-form .password-row > input { width: 100%; padding-right: 58px; }
+.password-toggle { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); padding: 3px 5px; border: 0; background: transparent; color: var(--accent); font-size: 10px; }
+.remember-row { display: flex; align-items: center; gap: 9px; font-size: 11px; }
+.account-form .remember-row input[type="checkbox"] { width: 16px; height: 16px; flex: 0 0 auto; margin: 0; padding: 0; accent-color: var(--accent); }
+.account-submit { width: 100%; }
+.account-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
+.text-button { padding: 4px 0; border: 0; background: transparent; color: var(--accent); font-size: 11px; text-align: left; }
+.text-button:hover { text-decoration: underline; text-underline-offset: 3px; }
+.account-status { color: var(--accent); padding: 0 30px 22px; }
+.account-status.is-error { color: var(--error); }
+.password-hint, .muted-copy { color: var(--muted); font-size: 10px; }
+.password-hint.is-valid { color: var(--accent); }
+.account-limitation { color: var(--muted); font-size: 12px; line-height: 1.8; }
+.profile-summary { gap: 11px; }
+.account-avatar-large { width: 58px; height: 58px; font-size: 21px; }
+.profile-summary > p { color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+.profile-summary h3 { margin-top: 8px; font-size: 15px; font-weight: 600; }
+.profile-review-item { display: block; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 12px; overflow-wrap: anywhere; }
+.profile-review-item:hover { color: var(--accent); }
+.profile-tools { display: flex; flex-wrap: wrap; gap: 12px; }
+.profile-tools > .form-field { width: 100%; }
+.profile-tools > .field { flex: 1 1 85px; min-width: 0; }
+.profile-tools select { max-width: 100%; }
+.profile-pagination { flex-wrap: wrap; margin-top: 0; padding-top: 16px; }
+.profile-pagination .page-controls { width: 100%; justify-content: space-between; }
+.account-toast { position: fixed; z-index: 100; right: 22px; bottom: 22px; max-width: min(420px, calc(100vw - 36px)); padding: 12px 17px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); box-shadow: var(--shadow); font-size: 12px; opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .2s, transform .2s; }
+.account-toast.is-visible { opacity: 1; transform: translateY(0); }
+.detail-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 23px; }
+.detail-actions > .button { margin-top: 0; }
+.detail-actions .watchlist-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+.review-login-prompt { padding: 18px; border-radius: 6px; }
+.review-login-prompt p { margin-bottom: 12px; font-size: 12px; color: var(--muted); }
+.watchlist-page { min-height: 65vh; padding-block: 60px 70px; }
+.watchlist-heading { align-items: flex-end; }
+.watchlist-heading h1 { font-size: clamp(30px, 4vw, 44px); font-weight: 550; letter-spacing: -1.4px; }
+.watchlist-heading p { color: var(--muted); font-size: 12px; }
+.watchlist-signin { padding: 40px 20px; border-radius: 8px; text-align: center; }
+.watchlist-signin .empty-symbol { display: block; }
+.watchlist-signin h2 { font-size: 22px; font-weight: 550; margin-block: 8px; }
+.watchlist-signin p { color: var(--muted); font-size: 12px; margin-bottom: 18px; }
+.watchlist-filters { flex-wrap: wrap; }
+.watchlist-filters .field { min-width: 130px; }
+.watchlist-grid { margin-top: 28px; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 23px; }
+.watchlist-card { display: flex; flex-direction: column; min-width: 0; border-radius: 7px; overflow: hidden; }
+.watchlist-poster-link { position: relative; display: block; aspect-ratio: 2/3; overflow: hidden; background: var(--surface); }
+.watchlist-poster-link img { width: 100%; height: 100%; object-fit: contain; }
+.watchlist-card-info { display: flex; flex: 1; padding: 13px; min-width: 0; flex-direction: column; align-items: flex-start; gap: 8px; }
+.watchlist-card-info > .eyebrow { display: block; color: var(--muted); font-size: 8px; letter-spacing: .6px; }
+.watchlist-card-title { font-size: 14px; line-height: 1.35; overflow-wrap: anywhere; }
+.watchlist-card-title a:hover { color: var(--accent); }
+.watchlist-rating, .watchlist-added { color: var(--muted); font-size: 10px; }
+.watchlist-remove { margin-top: auto; }
+.watchlist-empty { margin-top: 28px; padding: 45px 20px; border-radius: 8px; text-align: center; }
+.watchlist-empty h2 { margin-top: 8px; font-size: 22px; font-weight: 550; }
+.watchlist-empty p { margin: 8px 0 18px; color: var(--muted); font-size: 12px; }
+.watchlist-empty .button { display: inline-flex; }
+.watchlist-page .local-note { margin-top: 20px; }
+@media (max-width: 960px) {
+  .watchlist-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .account-trigger { gap: 5px; padding: 3px 5px; max-width: 132px; font-size: 9px; }
+  .account-trigger .account-avatar { width: 25px; height: 25px; }
+  .account-menu { min-width: 190px; }
+  .account-dialog-content { padding: 24px 20px; }
+  .account-dialog-title { font-size: 22px; }
+  .account-status { padding-inline: 20px; }
+  .detail-actions { gap: 8px; margin-top: 8px; }
+  .detail-actions > .button { padding: 9px 10px; font-size: 9px; gap: 8px; }
+  .watchlist-page { padding-block: 38px 50px; }
+  .watchlist-heading { gap: 12px; align-items: flex-start; }
+  .watchlist-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .watchlist-card-info { padding: 11px; }
+  .watchlist-card-title { font-size: 12px; }
+  .watchlist-remove { font-size: 9px; padding: 8px; }
+}
