@@ -1,8 +1,8 @@
 NHẬT KÝ ĐỒNG HÀNH CÙNG AI (PROMPT LOG)
 Học phần: Thiết kế Web – Trường Đại học Lạc Hồng (LHU)
-Tên nhóm: [Điền tên nhóm]
-Lớp: [Điền lớp]
-Thành viên: [Điền họ tên và mã số sinh viên của các thành viên]
+Tên nhóm: Nhóm 11
+Lớp: 26CT501
+Thành viên: Huỳnh Mai Phát-526000150, Trần Thành Đạt-526000145
 Tên dự án: KHUNG HÌNH – WEBSITE GIỚI THIỆU PHIM
 Chủ đề: Thiết kế giao diện website giới thiệu phim, gồm cấu trúc trang web, trang đăng nhập, hiệu ứng Frontend/UI/UX và nội dung giới thiệu phim.
 Phạm vi của nhật ký: Tài liệu được biên soạn để nhóm sử dụng trong báo cáo học phần. Phần trao đổi yêu cầu ưu tiên trang đăng nhập là nội dung có cơ sở từ hội thoại ChatGPT ngày 21/10/2026. Các prompt hoàn chỉnh ở những giai đoạn khác được biên soạn lại thành mẫu prompt chuẩn, chưa có bằng chứng rằng nhóm đã gửi nguyên văn hoặc triển khai đầy đủ. Những nhận xét kỹ thuật bên dưới mô tả cách xử lý và tiêu chí cần đạt, không thay thế kết quả chạy thử. Khi nộp nhật ký, nhóm cần bảo đảm nội dung khớp với công việc thực tế và dùng ảnh chụp cuộc hội thoại thật làm minh chứng.
