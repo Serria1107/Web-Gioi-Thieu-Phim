@@ -49,7 +49,7 @@ Giai đoạn 3 – Thiết kế hiệu ứng Frontend và UI/UX
 Mục tiêu: Nâng cao trải nghiệm người dùng, làm giao diện có nét riêng nhưng vẫn đọc được nội dung, dễ thao tác và không làm hỏng chức năng đang có.
 
 Prompt 03 – Bản prompt biên soạn cho giai đoạn UI/UX:
-Hãy đóng vai UI/UX Designer và Frontend Developer. Tôi muốn nâng cấp giao diện website giới thiệu phim Khung Hình theo phong cách điện ảnh hiện đại. Hãy rà soát màu sắc, typography, bố cục, menu điều hướng, banner và movie card. Ưu tiên Dark Theme, màu nhấn nhất quán, khoảng trắng hợp lý và hình ảnh đúng tỷ lệ. Đề xuất các hiệu ứng nhẹ như hover card, chuyển trạng thái nút, xuất hiện nội dung khi cuộn và chuyển cảnh mượt mà. Hãy đảm bảo responsive cho mobile, tablet và desktop, hỗ trợ điều khiển bằng bàn phím và prefers-reduced-motion. Chỉ sửa những file cần thiết, không thay đổi logic JavaScript đang hoạt động và không thêm thư viện nếu chưa có lý do rõ ràng. Cuối cùng, hướng dẫn cách kiểm tra kết quả bằng trình duyệt.
+Hãy đóng vai UI/UX Designer và Frontend Developer. Tôi muốn nâng cấp giao diện website giới thiệu phim Khung Hình theo phong cách điện ảnh hiện đại. Hãy rà soát màu sắc, typography, bố cục, menu điều hướng, banner và movie card. Ưu tiên Dark Theme, màu nhấn nhất quán, khoảng trắng hợp lý và hình ảnh đúng tỷ lệ. Đề xuất các hiệu ứng nhẹ như hover card, chuyển trạng thái nút, xuất hiện nội dung khi cuộn và chuyển cảnh mượt mà. Hãy đảm bảo responsive cho mobile, tablet và desktop, hỗ trợ điều khiển bằng bàn phím và prefers-reduced-motion. Chỉ sửa những file cần thiết và không thêm thư viện nếu chưa có lý do rõ ràng. Cuối cùng, hướng dẫn cách kiểm tra kết quả bằng trình duyệt.
 
 Kết quả và hướng tùy chỉnh:
 - Phong cách thiết kế được định hướng là Dark Cinematic UI với poster nổi bật, nội dung dễ đọc và màu nhấn nhất quán.
@@ -76,7 +76,7 @@ Công thức nhóm có thể áp dụng:
 Vai trò AI + Bối cảnh dự án + Công nghệ sử dụng + Yêu cầu cụ thể + Giới hạn chỉnh sửa + Tiêu chí kiểm thử + Kết quả mong muốn.
 
 Prompt tiêu biểu:
-Bạn là một Senior Frontend Developer. Dự án của tôi là website giới thiệu phim sử dụng HTML, CSS và JavaScript. Hãy kiểm tra và cải thiện giao diện hiện tại trên mobile, ưu tiên lỗi tràn nội dung và hiển thị card phim. Chỉ sửa những file có liên quan, không viết lại toàn bộ dự án, không thay đổi logic đang chạy. Nêu nguyên nhân lỗi, giải pháp, những file đã sửa và các bước để tôi tự kiểm tra bằng Chrome DevTools.
+Bạn là một Senior Frontend Developer. Dự án của tôi là website giới thiệu phim sử dụng HTML, CSS . Hãy kiểm tra và cải thiện giao diện hiện tại trên mobile, ưu tiên lỗi tràn nội dung và hiển thị card phim. Chỉ sửa những file có liên quan, không viết lại toàn bộ dự án, không thay đổi logic đang chạy. Nêu nguyên nhân lỗi, giải pháp, những file đã sửa và các bước để tôi tự kiểm tra bằng Chrome DevTools.
 
 Điểm rút ra: Prompt có phạm vi rõ ràng dễ kiểm soát hơn một yêu cầu chung chung như “Hãy làm cho website đẹp hơn”. Nhóm cũng dễ hiểu và giải thích được vì sao AI đề xuất những chỉnh sửa cụ thể.
 3.2. Những khó khăn tiêu biểu và cách khắc phục
@@ -92,9 +92,9 @@ Poster hoặc thông tin phim thiếu chính xác	Nguồn ảnh/dữ liệu chư
 Bảng này tổng hợp các khó khăn phù hợp với loại dự án và cách xử lý; không có nghĩa mọi lỗi đều đã xảy ra hoặc đều đã được khắc phục trong mã nguồn cuối cùng.
 3.3. Cách kiểm tra độ chính xác của mã do AI hỗ trợ
 Quy trình kiểm thử nên thực hiện như sau:
-1. Kiểm tra cấu trúc mã: Đọc file HTML/CSS/JavaScript đã thêm hoặc sửa, xác định nhiệm vụ của từng thành phần, phát hiện đoạn trùng và cú pháp sai.
+1. Kiểm tra cấu trúc mã: Đọc file HTML/CSS đã thêm hoặc sửa, xác định nhiệm vụ của từng thành phần, phát hiện đoạn trùng và cú pháp sai.
 2. Chạy giao diện trên trình duyệt: Mở bằng VS Code Live Server hoặc môi trường chạy phù hợp, đối chiếu giao diện với yêu cầu thiết kế.
-3. Kiểm tra bằng Chrome DevTools: Sử dụng tab Console để xem lỗi JavaScript và tab Elements để kiểm tra HTML/CSS.
+3. Kiểm tra bằng Chrome DevTools: Sử dụng tab Elements để kiểm tra HTML/CSS.
 4. Kiểm thử Responsive: Sử dụng Device Toolbar ở các kích thước phổ biến như 390px, 768px và 1440px; kiểm tra menu, nút bấm, form và thẻ phim.
 5. Kiểm thử trang Login: Thử để trống các trường, nhập email sai định dạng, bật/tắt hiển thị mật khẩu và xem thông báo; chỉ gọi là đăng nhập thật khi có xác thực backend.
 6. Kiểm thử nội dung phim: Kiểm tra poster, tên, thể loại, tìm kiếm/lọc, đường dẫn và trạng thái không có kết quả.
@@ -116,7 +116,7 @@ Nhóm thống nhất các nguyên tắc trước khi nộp sản phẩm cuối k
 Các nguyên tắc trên là nội dung cam kết dự kiến. Chỉ có thể xác nhận nhóm đã đáp ứng đầy đủ sau khi thành viên tự đọc hiểu mã, chỉnh sửa và kiểm thử thực tế.
 5. Phụ lục – Minh chứng hội thoại với AI
 Theo hướng dẫn học phần, nhóm cần chụp ảnh màn hình từ các cuộc trao đổi thực tế, không tạo hoặc sử dụng ảnh minh chứng giả. Các nội dung nên chọn để minh họa gồm:
-1. Thiết kế cấu trúc: Hội thoại trao đổi về các khu vực chính của website và cách tổ chức HTML/CSS/JS.
+1. Thiết kế cấu trúc: Hội thoại trao đổi về các khu vực chính của website và cách tổ chức HTML/CSS.
 2. Trang đăng nhập: Hội thoại ChatGPT ngày 21/10/2026 về yêu cầu tạo trang Login trước; đây là nội dung đã có cơ sở đối chiếu.
 3. UI/UX: Hội thoại yêu cầu cải thiện màu sắc, responsive, hiệu ứng và nguyên tắc giữ nguyên chức năng cũ (nếu nhóm đã thực sự thực hiện).
 4. Nội dung phim: Hội thoại về movie card, poster, giới thiệu phim hoặc tìm kiếm/lọc (nếu có trong lịch sử sử dụng AI).
