@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Chỉnh sửa thông tin hồ sơ cá nhân tại Khung Hình.">
+  <title>Chỉnh sửa hồ sơ — Khung Hình</title>
+  <script src="js/theme.js"></script>
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/account.css">
+  <script src="js/movies.js" defer></script>
+  <script src="js/list.js" defer></script>
+  <script src="js/scores.js" defer></script>
+  <script src="js/storage.js" defer></script>
+  <script src="js/avatar.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/profile-edit.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Đi đến nội dung</a>
+  <header class="site-header"><div class="header-inner container">
+    <a class="brand" href="index.html" aria-label="Khung Hình — Trang chủ"><span class="brand-mark" aria-hidden="true"><i></i></span><span>khung hình<span class="brand-caption">MỘT KHÔNG GIAN ĐIỆN ẢNH</span></span></a>
+    <nav class="main-nav" aria-label="Điều hướng chính"><a href="index.html">Trang chủ</a><a href="index.html#catalog">Khám phá phim</a><a class="active" href="profile.html">Hồ sơ</a></nav>
+    <div class="header-actions"><a class="icon-button search-shortcut" href="index.html#search" aria-label="Tìm kiếm phim"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></a><span class="header-divider" aria-hidden="true"></span><button class="login-button" type="button">Đăng nhập</button><button class="icon-button theme-button" type="button" data-theme-toggle aria-label="Chuyển chế độ sáng tối"><span data-theme-symbol aria-hidden="true">☾</span></button></div>
+  </div></header>
+  <main id="main" class="container account-page">
+    <section class="account-signin glass" id="edit-signin" hidden aria-labelledby="edit-signin-title"><p class="eyebrow">KHUNG HÌNH / HỒ SƠ CÁ NHÂN</p><h1 id="edit-signin-title">Đăng nhập để chỉnh sửa hồ sơ.</h1><p>Thông tin của bạn được lưu riêng theo tài khoản.</p><button class="button button-accent" type="button" id="edit-login">Đăng nhập</button></section>
+    <section id="edit-private" hidden aria-labelledby="edit-title">
+      <a class="detail-breadcrumb" href="profile.html">← Trở lại hồ sơ của tôi</a>
+      <div class="account-edit-heading"><p class="eyebrow">KHUNG HÌNH / GÓC RIÊNG CỦA BẠN</p><h1 id="edit-title">Kể thêm một chút về bạn.</h1><p>Một gương mặt, một cái tên, một góc nhìn điện ảnh.</p></div>
+      <form id="profile-edit-form" class="profile-edit-form glass" novalidate>
+        <fieldset id="edit-fields">
+          <legend class="sr-only">Thông tin hồ sơ</legend>
+          <div class="avatar-editor"><div id="edit-avatar-preview"></div><div><label class="form-field"><span>Ảnh đại diện</span><input type="file" id="edit-avatar" name="avatar" accept="image/png,image/jpeg,image/webp" aria-describedby="edit-avatar-hint edit-avatarImage-error"></label><p id="edit-avatar-hint" class="muted-copy">PNG, JPEG hoặc WebP · tối đa 2 MB và 4096 × 4096 pixel. Ảnh được thu nhỏ trước khi lưu.</p><button id="edit-remove-avatar" class="text-button" type="button">Dùng avatar mặc định</button><small class="field-error" id="edit-avatarImage-error" role="status"></small></div></div>
+          <div class="profile-form-grid">
+            <label class="form-field"><span>Tên hiển thị</span><input id="edit-displayName" name="displayName" maxlength="80" required autocomplete="name" aria-describedby="edit-displayName-error"><small id="edit-displayName-error" class="field-error"></small></label>
+            <label class="form-field"><span>Username</span><input id="edit-username" name="username" minlength="3" maxlength="32" required autocomplete="username" aria-describedby="edit-username-error"><small id="edit-username-error" class="field-error"></small></label>
+            <label class="form-field profile-form-wide"><span>Email</span><input id="edit-email" name="email" type="email" maxlength="254" required autocomplete="email" aria-describedby="edit-email-error edit-email-hint"><small id="edit-email-error" class="field-error"></small><small class="muted-copy" id="edit-email-hint">Email dùng để đăng nhập demo; website chưa xác minh hoặc gửi email.</small></label>
+            <label class="form-field profile-form-wide"><span>Giới thiệu bản thân</span><textarea id="edit-bio" name="bio" maxlength="500" rows="4" placeholder="Bộ phim nào đã khiến bạn yêu điện ảnh?" aria-describedby="edit-bio-error"></textarea><small id="edit-bio-error" class="field-error"></small></label>
+          </div>
+        </fieldset>
+        <p id="edit-status" class="form-status" role="status" aria-live="polite"></p>
+        <div class="profile-form-actions"><button id="edit-save" class="button button-accent" type="submit">Lưu thay đổi ↗</button><button id="edit-cancel" class="button button-outline" type="button">Hủy thay đổi</button></div>
+      </form>
+    </section>
+    <p class="local-note account-local-note">Thay đổi thông tin không thay ID tài khoản, Watchlist hoặc quyền sở hữu bài đánh giá.</p>
+  </main>
+  <footer class="site-footer"><div class="container footer-inner"><a class="brand footer-brand" href="index.html"><span class="brand-mark" aria-hidden="true"><i></i></span><span>khung hình</span></a><p>Một không gian dành cho tình yêu điện ảnh.</p><a href="docs/sources.md">Nguồn dữ liệu & hình ảnh ↗</a><span>© 2026 KHUNG HÌNH</span></div></footer>
+  <noscript><p class="noscript-note">Bật JavaScript để chỉnh sửa hồ sơ.</p></noscript>
+</body>
+</html>

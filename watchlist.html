@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Danh sách phim cá nhân muốn xem tại Khung Hình.">
+  <title>Danh sách muốn xem — Khung Hình</title>
+  <script src="js/theme.js"></script>
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/movies.js" defer></script>
+  <script src="js/list.js" defer></script>
+  <script src="js/scores.js" defer></script>
+  <script src="js/storage.js" defer></script>
+  <script src="js/avatar.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/watchlist.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Đi đến nội dung</a>
+  <header class="site-header">
+    <div class="header-inner container">
+      <a class="brand" href="index.html" aria-label="Khung Hình — Trang chủ"><span class="brand-mark" aria-hidden="true"><i></i></span><span>khung hình<span class="brand-caption">MỘT KHÔNG GIAN ĐIỆN ẢNH</span></span></a>
+      <nav class="main-nav" aria-label="Điều hướng chính">
+        <a href="index.html">Trang chủ</a><a href="index.html#catalog">Khám phá phim</a><a class="active" href="watchlist.html" aria-current="page">Watchlist</a>
+      </nav>
+      <div class="header-actions">
+        <a class="icon-button search-shortcut" href="index.html#search" aria-label="Tìm kiếm phim"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <button class="login-button" type="button">Đăng nhập</button>
+        <button class="icon-button theme-button" type="button" data-theme-toggle aria-label="Chuyển chế độ sáng tối"><span data-theme-symbol aria-hidden="true">☾</span></button>
+      </div>
+    </div>
+  </header>
+  <main id="main" class="container watchlist-page">
+    <section aria-labelledby="watchlist-title">
+      <div class="section-topline"><span class="eyebrow">KHUNG HÌNH <span class="eyebrow-line"></span> BỘ SƯU TẬP CÁ NHÂN</span><span class="small-note" id="watchlist-count"></span></div>
+      <div class="section-heading watchlist-heading"><div><h1 id="watchlist-title">My Watchlist.</h1><p id="watchlist-owner"></p></div><p>Lưu những câu chuyện bạn muốn khám phá tiếp theo.<br><a class="text-link" href="profile.html">Hồ sơ của tôi ↗</a></p></div>
+      <section class="watchlist-signin glass" id="watchlist-signin" hidden aria-labelledby="watchlist-signin-title">
+        <span class="empty-symbol" aria-hidden="true">＋</span><h2 id="watchlist-signin-title">Đăng nhập để xem Watchlist</h2>
+        <p>Mỗi tài khoản demo có danh sách riêng được lưu trong trình duyệt này.</p>
+        <button class="button button-accent" id="watchlist-login" type="button">Đăng nhập</button>
+      </section>
+      <div id="watchlist-controls" class="catalog-toolbar glass" hidden>
+        <label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span class="sr-only">Tìm kiếm phim đã lưu</span><input id="watchlist-search" type="search" placeholder="Tìm phim trong danh sách…" autocomplete="off" maxlength="200"></label>
+        <div class="filters-row watchlist-filters">
+          <label class="field"><span>Thể loại</span><select id="watchlist-genre"><option value="">Tất cả thể loại</option></select></label>
+          <label class="field"><span>Năm phát hành</span><select id="watchlist-year"><option value="">Tất cả năm</option></select></label>
+          <label class="field"><span>Điểm tổng hợp</span><select id="watchlist-score"><option value="">Tất cả điểm</option><option value="high">8–10 /10</option><option value="mid">6–7,9 /10</option><option value="low">Dưới 6 /10</option><option value="none">Chưa có điểm</option></select></label>
+          <button class="clear-button" id="watchlist-clear" type="button">Xóa bộ lọc ↺</button>
+        </div>
+      </div>
+      <div class="results-toolbar" id="watchlist-toolbar" hidden>
+        <p id="watchlist-summary" role="status" aria-live="polite"></p>
+        <div class="list-settings">
+          <label class="compact-field"><span>Sắp xếp</span><select id="watchlist-sort"><option value="asc">Tiêu đề A–Z</option><option value="desc">Tiêu đề Z–A</option><option value="added-desc">Ngày thêm mới nhất</option><option value="added-asc">Ngày thêm cũ nhất</option><option value="rating-desc">Điểm cao nhất</option><option value="rating-asc">Điểm thấp nhất</option></select></label>
+          <label class="compact-field"><span>Hiển thị</span><select id="watchlist-size"><option value="10">10 phim</option><option value="20">20 phim</option><option value="50">50 phim</option><option value="all">Tất cả</option></select></label>
+        </div>
+      </div>
+      <div class="movie-grid watchlist-grid" id="watchlist-grid"></div>
+      <div class="empty-state glass watchlist-empty" id="watchlist-empty" hidden>
+        <span class="empty-symbol" aria-hidden="true">⌕</span><h2 id="watchlist-empty-title">Chưa có phim nào</h2>
+        <p id="watchlist-empty-copy">Khám phá thư viện và lưu những bộ phim bạn muốn xem.</p>
+        <a class="button button-accent" href="index.html#catalog">Khám phá phim <span aria-hidden="true">↗</span></a>
+      </div>
+      <nav id="watchlist-pagination" class="pagination" aria-label="Phân trang Watchlist"></nav>
+      <p class="local-note">Watchlist demo chỉ lưu trong trình duyệt và tài khoản hiện tại; không đồng bộ giữa thiết bị.</p>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="container footer-inner"><a class="brand footer-brand" href="index.html"><span class="brand-mark" aria-hidden="true"><i></i></span><span>khung hình</span></a><p>Một không gian dành cho tình yêu điện ảnh.</p><a href="docs/sources.md">Nguồn dữ liệu & hình ảnh ↗</a><span>© 2026 KHUNG HÌNH</span></div></footer>
+  <noscript><p class="noscript-note">Bật JavaScript để sử dụng Watchlist cá nhân.</p></noscript>
+</body>
+</html>
